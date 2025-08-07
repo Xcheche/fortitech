@@ -1,0 +1,40 @@
+  
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Contact Us Area -->
+    <section class="contact_area">
+        <div class="container">  
+            <form class="row from_main" action="" method="post" id="phpcontactform" novalidate="novalidate"> 
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                </div> 
+                <div class="form-group col-md-6">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="company" name="company" placeholder="Company">
+                </div> 
+                <div class="form-group col-md-6">    
+					<select class="post_select">
+						<option>Select request</option>
+						<option>Travel Post</option>
+						<option>Finance Post</option> 
+						<option>Trading Post</option> 
+						<option>Tech Post</option> 
+						<option>Vodeo Post</option> 
+					</select>  
+                </div>
+                <div class="form-group col-12">
+                    <textarea class="form-control" id="message" name="message" placeholder="Message"></textarea>
+                </div>
+                <div class="form-group col-12">
+                    <button class="submit_btn btn" id="js-contact-btn" type="submit">SEND Request <i class="fa fa-arrow-right"></i></button> 
+                    <div id="js-contact-result" data-success-msg="Form submitted successfully." data-error-msg="Messages Successfully"></div>
+                </div>
+            </form> 
+        </div>
+    </section>
+    <!-- End Contact Us Area -->  
+   
+{% endblock %}    

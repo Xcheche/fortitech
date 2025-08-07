@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" href="images/favicon.png" type="image/x-icon" />
+    <!-- Theme tittle -->
+    <title>Cypher Guard  | Html Template</title> 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    
+    <!-- Theme style CSS -->     
+    <link href="{% static 'css/style.css' %}" rel="stylesheet"> 
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body> 
+    
+    <!-- Header Top Area -->
+    <div class="header_top_area"> 
+        <div class="container"> 
+            <div class="header_top_inner d-sm-flex justify-content-sm-between">
+                <ul class="left_info"> 
+                    <li><a href="index-2.html">Cypher Guard</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="error.html">Error 404</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul> 
+                <ul class="header_social">
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li> 
+                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    <li><a href="#"><i class="fa fa-vine"></i></a></li> 
+                    <li><a href="#" class="shop_btn"><i class="flaticon-shopping-bag"></i> <span>0</span></a></li>
+                    <li><a href="#" class="quote_btn">Get Free Quote <i class="fa fa-arrow-right"></i></a></li>
+                </ul> 
+            </div>
+        </div> 
+    </div>
+    <!-- Header Top Area -->   
+ <!--====Main header=====-->   
+   {% include 'inc/main-header.html' %}
+   <!--====End of Main header=====-->       
+    <!--====Main content-->
+   {%block content %} {% endblock %}
+    <!--===End o main content=====-->
+    
+    <!--===Connect with us===-->
+  {% include 'inc/connect-with-us.html' %}
+    <!--===End Connect with us===-->
+        
+    <!--===Footer Area===-->  
+   {%include 'inc/footer.html' %}
+    <!--===End Footer Area===-->  
+    
+    <!-- Scroll Top Button -->
+    <button class="scroll-top">
+        <i class="fa fa-angle-double-up"></i>
+    </button>
+    
+    <!-- Preloader -->
+    <div class="preloader"></div>
+    <!--===Alerts.js-->
+    <script src="{% static 'js/alerts.js' %}"></script>
+    
+    <!-- jQuery v3.2.1 -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script> 
+    <script src="{% static 'js/popper.min.js' %}"></script> 
+    <!-- Bootstrap v4.1.0 -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script> 
+    <!-- Extra Plugin -->
+    <script src="{% static 'vendors/animate-css/wow.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-selector/jquery.nice-select.min.js' %}"></script>  
+    
+    <!-- Theme js / Custom js -->
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+
+</html>

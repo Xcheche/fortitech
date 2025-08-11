@@ -14,6 +14,11 @@ from common.tasks import send_email
 from datetime import datetime, timezone 
 from .decorators import redirect_autheticated_user
 
+#Password change
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 User = get_user_model()
 
 
@@ -47,26 +52,29 @@ User = get_user_model()
 #     }
 
 #     return render(request, 'accounts/dashboard.html', context)
+# @login_required
 def dashboard(request):
-    # Get the existing dashboard (signal handles creation)
-    dashboard_obj = request.user.dashboard
-    
+    dashboard_obj = request.user.dashboard  # from related_name
+
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         dashboard_form = DashboardUpdateForm(request.POST, request.FILES, instance=dashboard_obj)
-        
+
         if user_form.is_valid() and dashboard_form.is_valid():
             user_form.save()
             dashboard_form.save()
             messages.success(request, 'Dashboard updated successfully!')
             return redirect('dashboard')
         else:
-            messages.error(request, 'Please correct the errors.')
+            # Show exactly what went wrong
+            print("User form errors:", user_form.errors)
+            print("Dashboard form errors:", dashboard_form.errors)
+            messages.error(request, 'Please correct the errors below.')
     else:
         user_form = UserUpdateForm(instance=request.user)
         dashboard_form = DashboardUpdateForm(instance=dashboard_obj)
-    
-    context = {
+
+    return render(request, "accounts/dashboard.html", {
         "page_title": "Dashboard",
         "breadcrumbs": [
             {"name": "Home", "url": "/"},
@@ -74,10 +82,34 @@ def dashboard(request):
         ],
         'user_form': user_form,
         'dashboard_form': dashboard_form,
-    }
-    
-    return render(request, "accounts/dashboard.html", context)
+    })
 
+
+
+#====Delete Dashboard
+# This view handles the deletion of the user's dashboard. It deletes the dashboard and redirects to the
+
+def delete_dashboard(request):
+    if request.method == "POST":
+        # You can either delete just the dashboard, or delete the whole user
+        request.user.delete()  # deletes user and dashboard because of cascade
+        messages.success(request, "Your account has been deleted.")
+        return redirect("home")  # or a goodbye page
+    
+    return render(request, "accounts/delete_dashboard.html", {
+        "page_title": "Delete Account"
+    })
+
+
+#=====Change Password
+# This view handles the change of the user's password. It checks if the old password is correct
+class DashboardPasswordChangeView(PasswordChangeView):
+    template_name = "accounts/change_password.html"
+    success_url = reverse_lazy("dashboard")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Your password has been changed successfully.")
+        return super().form_valid(form)
 
 
 

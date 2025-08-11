@@ -9,6 +9,7 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         # You can add other fields from CustomUser here
         fields = ['email']
+        exclude = ['user']  # Prevents 'user' from showing up in the form
 
 class DashboardUpdateForm(forms.ModelForm):
     # This form handles the country and city fields
@@ -18,7 +19,8 @@ class DashboardUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Dashboard
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ['user']
 
 
 

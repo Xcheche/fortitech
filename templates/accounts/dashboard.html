@@ -2055,7 +2055,11 @@ p {
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
+                  {% if dashboard_form.instance.profile_picture %}
                   <img alt="Image placeholder" src="{{ dashboard_form.instance.profile_picture.url}}">
+                  {% else %}
+                  <img alt="Image placeholder" src="{% static 'images/default.png' %}">
+                  {% endif %}
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
                   <span class="mb-0 text-sm  font-weight-bold">{{ dashboard_form.instance.nick_name }}</span>
@@ -2093,7 +2097,11 @@ p {
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
                   <a href="#">
+                    {% if dashboard_form.instance.profile_picture %}
                     <img src="{{ dashboard_form.instance.profile_picture.url}}" class="rounded-circle">
+                    {% else %}
+                    <img src="{% static 'images/default.png' %}" class="rounded-circle">
+                    {% endif %}
                   </a>
                 </div>
               </div>
@@ -2154,8 +2162,8 @@ p {
                         <div class="dropdown-header noti-title">
                           <h6 class="text-overflow m-0">Welcome!</h6>
                         </div>
-                       
-                        <a href="../examples/profile.html" class="dropdown-item">
+
+                      <a href="{% url 'change_password' %}" class="dropdown-item">
                           <i class="ni ni-settings-gear-65"></i>
                           <span>Change password</span>
                         </a>
@@ -2167,7 +2175,7 @@ p {
                           <i class="ni ni-support-16"></i>
                           <span>Support</span>
                         </a>
-                        <a href="../examples/profile.html" class="dropdown-item">
+                        <a href="{% url 'delete_dashboard' %}" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
                             <span>Deactivate</span>
                           </a>

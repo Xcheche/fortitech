@@ -5,6 +5,9 @@ from . import views
 urlpatterns = [
     # path('',views.landing,name='landing'),
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("dashboard/delete/", views.delete_dashboard, name="delete_dashboard"),
+    path("dashboard/change-password/", views.DashboardPasswordChangeView.as_view(), name="change_password"),
+
     # Auth
     path("register/", views.register, name="register"),
     path("verify_account/", views.verify_account, name="verify_account"),

@@ -1,5 +1,6 @@
 {% extends  'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
 
 
@@ -2038,6 +2039,9 @@ p {
   margin-bottom: 20px;
 }
 </style>
+
+
+
   <div class="main-content">
     <!-- Top navbar -->
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
@@ -2051,10 +2055,10 @@ p {
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg">
+                  <img alt="Image placeholder" src="{{ dashboard_form.instance.profile_picture.url}}">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                  <span class="mb-0 text-sm  font-weight-bold">{{ dashboard_form.instance.nick_name }}</span>
                 </div>
               </div>
             </a>
@@ -2075,7 +2079,7 @@ p {
           <div class="col-lg-7 col-md-10">
             <h1 class="display-2 text-white">Hello {{ user.email|capfirst }}</h1>
             <p class="text-white mt-0 mb-5">This is your dashboard; feel free to modify and use the settings dropdown for logging off and more..</p>
-            <a href="#!" class="btn btn-info">Edit profile</a>
+           
           </div>
         </div>
       </div>
@@ -2089,7 +2093,7 @@ p {
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
                   <a href="#">
-                    <img src="https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg" class="rounded-circle">
+                    <img src="{{ dashboard_form.instance.profile_picture.url}}" class="rounded-circle">
                   </a>
                 </div>
               </div>
@@ -2115,19 +2119,19 @@ p {
               </div>
               <div class="text-center">
                 <h3>
-                  Jessica Jones<span class="font-weight-light">, 27</span>
+                  {{ dashboard_form.instance.first_name}}<span class="font-weight-light">, {{ dashboard_form.instance.last_name}}</span>
                 </h3>
                 <div class="h5 font-weight-300">
-                  <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                  <i class="ni location_pin mr-2"></i>  {{ dashboard_form.instance.city}},  {{ dashboard_form.instance.country}}
                 </div>
-                <div class="h5 mt-4">
+                <!-- <div class="h5 mt-4">
                   <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-                </div>
-                <div>
+                </div> -->
+                <!-- <div>
                   <i class="ni education_hat mr-2"></i>University of Computer Science
-                </div>
+                </div> -->
                 <hr class="my-4">
-                <p>Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.</p>
+                <p>  {{ dashboard_form.instance.bio }}.</p>
                
               </div>
             </div>
@@ -2180,20 +2184,23 @@ p {
               </div>
             </div>
             <div class="card-body">
-              <form>
+              <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
                 <h6 class="heading-small text-muted mb-4">User information</h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Username</label>
-                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Username" value="lucky.jesse">
+                        <label class="form-control-label" for="input-username">Nick name</label>
+                        
+                        {{ dashboard_form.nick_name|add_class:"form-control"|attr:"placeholder:Nick name" }}
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Email address</label>
-                        <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="jesse@example.com">
+                    
+                       {{ user_form.email|add_class:"form-control"|attr:"placeholder:Email" }}
                       </div>
                     </div>
                   </div>
@@ -2201,13 +2208,15 @@ p {
                     <div class="col-lg-6">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-first-name">First name</label>
-                        <input type="text" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="Lucky">
+                      
+                       {{ dashboard_form.first_name|add_class:"form-control"|attr:"placeholder:First Name" }}
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-last-name">Last name</label>
-                        <input type="text" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name" value="Jesse">
+                    
+                      {{ dashboard_form.last_name|add_class:"form-control"|attr:"placeholder:Last Name" }}
                       </div>
                     </div>
                   </div>
@@ -2220,7 +2229,8 @@ p {
                     <div class="col-md-12">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-address">Address</label>
-                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                        
+                        {{ dashboard_form.address|add_class:"form-control"|attr:"placeholder: Address" }}
                       </div>
                     </div>
                   </div>
@@ -2228,20 +2238,30 @@ p {
                     <div class="col-lg-4">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-city">City</label>
-                        <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City" value="New York">
+               
+                        {{ dashboard_form.city|add_class:"form-control"|attr:"placeholder:City" }}
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-country">Country</label>
-                        <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="United States">
+                        {{ dashboard_form.country|add_class:"form-control"|attr:"placeholder:Country" }}
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label" for="input-country">Postal code</label>
-                        <input type="number" id="input-postal-code" class="form-control form-control-alternative" placeholder="Postal code">
+                        {{ dashboard_form.post_code|add_class:"form-control"|attr:"placeholder:Zip Code" }}
                       </div>
+
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Image</label>
+                        {{ dashboard_form.profile_picture|add_class:"form-control"|attr:"placeholder:Image" }}
+
+                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -2251,9 +2271,10 @@ p {
                 <div class="pl-lg-4">
                   <div class="form-group focused">
                     <label>About Me</label>
-                    <textarea rows="4" class="form-control form-control-alternative" placeholder="A few words about you ...">A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+                    {{ dashboard_form.bio|add_class:"form-control"|attr:"rows:6,placeholder:Bio" }}
                   </div>
                 </div>
+                <button  class="btn btn-info "  type="submit">Update</button>
               </form>
             </div>
           </div>

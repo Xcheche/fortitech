@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import PendingUser, Token
+
+from accounts.forms import DashboardUpdateForm, UserUpdateForm
+from .models import *
 
 from django.utils.crypto import get_random_string  # Create your views here.
 from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from datetime import datetime
 from common.tasks import send_email
-from django.utils import timezone
+from datetime import datetime, timezone 
 from .decorators import redirect_autheticated_user
 
 User = get_user_model()
@@ -21,28 +23,75 @@ User = get_user_model()
 #     else:
 #         return render(request, 'blog/index.html')
 
+#====Dashboard
+# def dashboard(request):
+#     if request.method == 'POST':
+#         user_form = UserUpdateForm(request.POST, instance=request.user)
+#         dashboard_form = DashboardUpdateForm(request.POST, request.FILES, instance=request.user.dashboard)
+#         if user_form.is_valid() and dashboard_form.is_valid():
+#             user_form.save()
+#             dashboard_form.save()
+#             messages.success(request, 'Your dashboard has been updated!')
+#             return redirect('dashboard')
+#     else:
+#         user_form = UserUpdateForm(instance=request.user)
+#         dashboard_form = DashboardUpdateForm(instance=request.user.dashboard)
+#     context = {
+#         "page_title": "Dashboard",
+#         "breadcrumbs": [
+#             {"name": "Home", "url": "/"},
+#             {"name": "Dashboard", "url": "dashboard"},
+#         ],
+#         'user_form': user_form,
+#         'dashboard_form': dashboard_form,
+#     }
+
+#     return render(request, 'accounts/dashboard.html', context)
 def dashboard(request):
+    # Get the existing dashboard (signal handles creation)
+    dashboard_obj = request.user.dashboard
+    
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        dashboard_form = DashboardUpdateForm(request.POST, request.FILES, instance=dashboard_obj)
+        
+        if user_form.is_valid() and dashboard_form.is_valid():
+            user_form.save()
+            dashboard_form.save()
+            messages.success(request, 'Dashboard updated successfully!')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Please correct the errors.')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        dashboard_form = DashboardUpdateForm(instance=dashboard_obj)
+    
     context = {
-        'page_title': 'Dashboard',
-        'breadcrumbs': [
-            {'name': 'Home', 'url': '/'},
-            {'name': 'Dashboard', 'url': 'Dashboard'}
-        ]
+        "page_title": "Dashboard",
+        "breadcrumbs": [
+            {"name": "Home", "url": "/"},
+            {"name": "Dashboard", "url": "dashboard"},
+        ],
+        'user_form': user_form,
+        'dashboard_form': dashboard_form,
     }
-    return render(request,'accounts/dashboard.html',context=context) 
+    
+    return render(request, "accounts/dashboard.html", context)
 
 
-# Register view with email verification
+
+
+#====== Register view with email verification
 # This view handles the registration of a new user. It checks if the email already exists in the database.
 # If the email is new, it creates a new PendingUser object with a verification code and sends a verification email.
 @redirect_autheticated_user
 def register(request: HttpRequest):
     context = {
-        'page_title': 'Register',
-        'breadcrumbs': [
-            {'name': 'Home', 'url': '/'},
-            {'name': 'Register', 'url': 'Register'}
-        ]
+        "page_title": "Register",
+        "breadcrumbs": [
+            {"name": "Home", "url": "/"},
+            {"name": "Register", "url": "Register"},
+        ],
     }
 
     if request.method == "POST":
@@ -61,7 +110,7 @@ def register(request: HttpRequest):
                 defaults={
                     "password": make_password(password),
                     "verification_code": verification_code,
-                    "created_at": datetime.now(timezone.utc),
+                   "created_at": datetime.now(timezone.utc), 
                 },
             )
             # Sending email
@@ -72,22 +121,23 @@ def register(request: HttpRequest):
                 context={"code": verification_code},
             )
             messages.success(request, f"Verification code sent to {cleaned_email}")
-            
-            # Add 'email' to the existing context for the POST response
-            context['email'] = cleaned_email
 
-            return render(
-                request, "accounts/verify_account.html", context=context
-            )
+            # Add 'email' to the existing context for the POST response
+            context["email"] = cleaned_email
+
+            return render(request, "accounts/verify_account.html", context=context)
 
     else:
         return render(request, "accounts/register.html", context=context)
-    
 
-#Verify Account    
+
+
+
+
+#======= Verify Account
 
 def verify_account(request: HttpRequest):
-    
+
     if request.method == "POST":
         code: str = request.POST["code"]
         email: str = request.POST["email"]
@@ -104,21 +154,23 @@ def verify_account(request: HttpRequest):
             return redirect("dashboard")
         else:
             messages.error(request, "Invalid or expired verification code")
-            return render(request, "accounts/verify_account.html", {"email": email}, status=400)
+            return render(
+                request, "accounts/verify_account.html", {"email": email}, status=400
+            )
 
 
-# Login view
+#======= Login view
 # This view handles the login of existing users. It checks if the email and password are correct.
 # If the credentials are valid, it logs the user in and redirects them to the home page.
 
 @redirect_autheticated_user
 def login(request: HttpRequest):
     context = {
-        'page_title': 'Register',
-        'breadcrumbs': [
-            {'name': 'Home', 'url': '/'},
-            {'name': 'Login', 'url': 'Login'}
-        ]
+        "page_title": "Register",
+        "breadcrumbs": [
+            {"name": "Home", "url": "/"},
+            {"name": "Login", "url": "Login"},
+        ],
     }
 
     if request.method == "POST":
@@ -134,17 +186,16 @@ def login(request: HttpRequest):
             return redirect("login")
 
     else:
-        return render(request, "accounts/login.html",context=context)
+        return render(request, "accounts/login.html", context=context)
 
 
-# Logout view
+#======= Logout view
 def logout(request: HttpRequest):
     auth.logout(request)
     messages.success(request, "You have been logged out")
     return redirect("home")
 
-
-
+#====password_reset
 def send_password_reset_link(request: HttpRequest):
     if request.method == "POST":
         email: str = request.POST.get("email", "")
@@ -153,14 +204,13 @@ def send_password_reset_link(request: HttpRequest):
         if user:
             token, _ = Token.objects.update_or_create(
                 user=user,
-                token_type=Token.TokenType.PASSWORD_RESET, 
-                
+                token_type=Token.TokenType.PASSWORD_RESET,
                 defaults={
                     "token": get_random_string(20),
                     "created_at": datetime.now(timezone.utc),
                 },
             )
-            #Sending email 
+            # Sending email
             email_data = {"email": email.lower(), "token": token.token}
             send_email(
                 "Your Password Reset Link",
@@ -178,7 +228,7 @@ def send_password_reset_link(request: HttpRequest):
     else:
         return render(request, "accounts/forgot_password.html")
 
-
+#=======verify_password
 def verify_password_reset_link(request: HttpRequest):
     email = request.GET.get("email")
     reset_token = request.GET.get("token")
@@ -197,7 +247,7 @@ def verify_password_reset_link(request: HttpRequest):
         context={"email": email, "token": reset_token},
     )
 
-
+#===========set_new_password
 def set_new_password_using_reset_link(request: HttpRequest):
     """Set a new password given the token sent to the user email"""
 
@@ -216,23 +266,16 @@ def set_new_password_using_reset_link(request: HttpRequest):
             )
 
         token: Token = Token.objects.filter(
-            token=reset_token, token_type=Token.TokenType.PASSWORD_RESET, user__email=email
+            token=reset_token,
+            token_type=Token.TokenType.PASSWORD_RESET,
+            user__email=email,
         ).first()
 
         if not token or not token.is_valid():
             messages.error(request, "Expired or Invalid reset link")
             return redirect("reset_password_via_email")
-        #resetting the user password and deleting the token  
+        # resetting the user password and deleting the token
         token.reset_user_password(password1)
         token.delete()
         messages.success(request, "Password changed.")
         return redirect("login")
-
-
-
-
-
-
-
-
-

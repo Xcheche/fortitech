@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .manager import CustomUserManager
 from common.models import BaseModel
+from django_countries.fields import CountryField
+from PIL import Image
 
 # Create your models here.
 
@@ -57,12 +59,11 @@ class Token(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=255)
     token_type = models.CharField(max_length=100, choices=TokenType.choices)
-   
 
     def __str__(self):
         return f"{self.user}  {self.token}"
-    
-    #check if token is valid
+
+    # check if token is valid
     def is_valid(self) -> bool:
         lifespan_in_seconds = 20 * 60  # 20 mins
         now = datetime.now(timezone.utc)
@@ -71,9 +72,53 @@ class Token(BaseModel):
         if timediff > lifespan_in_seconds:
             return False
         return True
-    
-    #resetting the user password
+
+    # resetting the user password
     def reset_user_password(self, raw_password: str):
         self.user: User
         self.user.set_password(raw_password)
         self.user.save()
+
+
+# User dashboard
+
+
+class Dashboard(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20, blank=True, null=True)
+    nick_name = models.CharField(max_length=10)
+
+    address = models.CharField(max_length=100, blank=True, null=True)
+    country = CountryField(blank=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+
+    city = models.CharField(max_length=30,blank=True,null=True)
+
+    post_code = models.CharField(max_length=100, blank=True, null=True)
+
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/%Y/%m/%d/",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"Dashboard for {self.user.email}"
+
+    class Meta:
+        verbose_name = "Dashboard"
+        verbose_name_plural = "Dashboard"
+
+    # Resizing profile_picture automatically
+    def save(self, *args, **kwargs):
+        # Call the parent save method with all arguments
+        super().save(*args, **kwargs)
+
+        # Resize the profile_picture
+        if self.profile_picture:
+            img = Image.open(self.profile_picture.path)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                img.save(self.profile_picture.path)

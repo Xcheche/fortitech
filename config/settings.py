@@ -38,6 +38,8 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'widget_tweaks',
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
 PROJECT_APPS = [
     # Projects
@@ -50,6 +52,14 @@ THIRD_PARTY_APPS = [
     # External apps/packages
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+# Middleware
+# https://docs.djangoproject.com/en/5.2/ref/settings/#middleware
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -146,7 +156,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 # Email config
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #for console
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
 
 #Mailpit
 EMAIL_HOST = "localhost"  # Mailpit host

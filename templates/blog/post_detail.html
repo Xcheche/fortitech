@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load blog_extras %}
+
+{% block content %}
+
+
+
+    <!-- Post section -->
+    <section class="post_section news_post">
+        <div class="container">
+            <div class="row post_section_inner">
+                <!-- Left_sidebar --> 
+                <div class="col-lg-8">  
+                    <div class="news_left_sidebar">
+                        <!-- News Item -->
+                        <div class="news_item news_details">
+                            <h6><span>{{ post.publish }}</span> <a href="#">
+                                {{ post.author.email|nice_name }}</a> <a href="#" class="investing">{{ post.category }}</a></h6>
+                            <a href="news-details.html" class="news_heding">{{ post.title }}</a>
+                            {% if post.post_image and post.post_image.url %}
+                            <img src="{{ post.post_image.url }}" alt="">
+                            {% else %}
+                            <img src="{% static 'images/post/placeholder.png' %}" alt="Placeholder Image">
+                            {% endif %}
+                            <p class="fast_p">{{ post.body }}</p>
+                            <div class="share_row row">
+                                <div class="col-sm-6 share_area">
+                                    <ul>
+                                        <li>Share:</li>
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6 back_to"><a href="/"><i class="fa fa-arrow-left"></i>Back to blog</a></div> 
+                               
+                            </div> 
+                        </div> 
+                                            <div class="comment_area">
+                            <h2>Comment (3)</h2>
+                            <div class="media">
+                                <div class="media-left"> 
+                                    <img src="images/post/author-2.jpg" alt="" class=" rounded-circle">
+                                    <a href="#">Asfia Asfia</a>
+                                </div>
+                                <div class="media-body">
+                                    <p>The payments are made directly from one person to another without passing through a central bank or clearing house.</p>
+                                    <h6>22 feb,2018</h6>
+                                    <a href="#" class="reply_btn">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="leave_reply"> 
+                           <h2>Leave a Reply</h2>
+                            <form class="row login_from">  
+                                <div class="form-group col-12">
+                                    <textarea class="form-control" id="message" name="message" placeholder="Your Comment"></textarea>
+                                </div>
+                                <div class="form-group col-12">   
+                                    <input type="text" class="form-control" placeholder="Name"> 
+                                </div> 
+                                <div class="form-group col-12">
+                                    <input type="email" class="form-control" name="email" placeholder="Email">
+                                </div> 
+                                <div class="form-group larg_btn col-12">
+                                    <button class="sm_btn" type="submit">Submit Reply <i class="fa fa-arrow-right"></i></button> 
+                                </div>     
+                            </form>  
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- End left_sidebar -->
+                <div class="col-lg-4 right_sidebar">  
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+
+                    
+                    <!--==Categories==-->
+                    <div class="categories">
+                        <h3>Post Categories</h3>
+                        <ul class="cpost_categories">
+                            <li><a href="#" class="active">Business<span>05</span></a></li>
+                            <li><a href="#">Finance & Business<span>04</span></a></li>
+                            
+                        </ul>
+                    </div>  
+                    <!--==End Categories==-->
+    
+                    <!--==== Trending News ====-->
+                    <div class="latest_news_widget p-0">
+                        <h2>Trending News</h2>
+                        <div class="widget"> 
+                            <a href="news-details.html"><img src="{% static 'images/post/lnw-1.jpg' %}" alt=""></a>
+                            <a href="news-details.html" class="w_heding">Envion – Digital Currency Mint in Exploits World’s Lowest Cost Power</a>
+                        </div>
+                        
+                      
+                        <a href="news.html" class="load_more_btn">Load more..</a>
+                    </div> 
+                    <!-- ======End Trending News ====== -->
+    
+    
+                  
+                    
+                    <!-- Video widget -->
+                    <div class="video_widget">
+                        <div class="watch_video">
+                            <a href="video-details.html" class="video_thumbnail">
+                                <img src="{% static 'images/post/wathc-5.jpg' %}" alt="">
+                                <span class="play_btn"><i class="flaticon-play-button">5.16</i></span>
+                            </a>
+                            <a href="video-details.html" class="video_heding">The easiest way to buy Bitcoin and Ethereum</a>
+                        </div>
+                    </div> 
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+{% endblock %}

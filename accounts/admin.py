@@ -14,19 +14,18 @@ class UserAdmin(admin.ModelAdmin):
     )
 
 
-
-#Dashboard
+# Dashboard
 class DashboardAdmin(admin.ModelAdmin):
-    list_display = ("nick_name", "first_name", "last_name","country")
-    search_fields = ("nick_name", "first_name", "last_name","country")
+    list_display = ("nick_name", "first_name", "last_name", "country")
+    search_fields = ("nick_name", "first_name", "last_name", "country")
     list_filter = ("first_name", "last_name")
-   
+
 
 # Register your models here.
 admin.site.register(User, UserAdmin)
 admin.site.register(PendingUser)
 
 
-#Dashboard
+# Dashboard
 
-admin.site.register(Dashboard,DashboardAdmin)
+admin.site.register(Dashboard, DashboardAdmin)

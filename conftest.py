@@ -34,15 +34,11 @@ def auth_user_password() -> str:
     return "testpassword123"
 
 
-
-
-
-
 @pytest.fixture
 def dashboard_update_data(user_instance):
     return {
-        "email": user_instance.email,   # From UserUpdateForm
-        "user": user_instance.id,       # Hidden Dashboard form field
+        "email": user_instance.email,  # From UserUpdateForm
+        "user": user_instance.id,  # Hidden Dashboard form field
         "first_name": "Test",
         "nick_name": "Tester",
         "country": "NG",  # ISO code for Nigeria

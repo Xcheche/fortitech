@@ -84,8 +84,9 @@ class Token(BaseModel):
 
 
 class Dashboard(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="dashboard")
-
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="dashboard"
+    )
 
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20, blank=True, null=True)
@@ -95,7 +96,7 @@ class Dashboard(models.Model):
     country = CountryField(blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
 
-    city = models.CharField(max_length=30,blank=True,null=True)
+    city = models.CharField(max_length=30, blank=True, null=True)
 
     post_code = models.CharField(max_length=100, blank=True, null=True)
 

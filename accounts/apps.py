@@ -5,7 +5,6 @@ class AccountsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "accounts"
 
-
     def ready(self):
         # Import your signal handlers here to connect them.
         import accounts.signals

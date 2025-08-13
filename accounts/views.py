@@ -11,10 +11,10 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import auth
 from datetime import datetime
 from common.tasks import send_email
-from datetime import datetime, timezone 
+from datetime import datetime, timezone
 from .decorators import redirect_autheticated_user
 
-#Password change
+# Password change
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,7 +28,7 @@ User = get_user_model()
 #     else:
 #         return render(request, 'blog/index.html')
 
-#====Dashboard
+# ====Dashboard
 # def dashboard(request):
 #     if request.method == 'POST':
 #         user_form = UserUpdateForm(request.POST, instance=request.user)
@@ -51,43 +51,50 @@ User = get_user_model()
 #         'dashboard_form': dashboard_form,
 #     }
 
+
 #     return render(request, 'accounts/dashboard.html', context)
 # @login_required
 def dashboard(request):
     dashboard_obj = request.user.dashboard  # from related_name
 
-    if request.method == 'POST':
+    if request.method == "POST":
         user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
-        dashboard_form = DashboardUpdateForm(request.POST, request.FILES, instance=dashboard_obj)
+        dashboard_form = DashboardUpdateForm(
+            request.POST, request.FILES, instance=dashboard_obj
+        )
 
         if user_form.is_valid() and dashboard_form.is_valid():
             user_form.save()
             dashboard_form.save()
-            messages.success(request, 'Dashboard updated successfully!')
-            return redirect('dashboard')
+            messages.success(request, "Dashboard updated successfully!")
+            return redirect("dashboard")
         else:
             # Show exactly what went wrong
             print("User form errors:", user_form.errors)
             print("Dashboard form errors:", dashboard_form.errors)
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, "Please correct the errors below.")
     else:
         user_form = UserUpdateForm(instance=request.user)
         dashboard_form = DashboardUpdateForm(instance=dashboard_obj)
 
-    return render(request, "accounts/dashboard.html", {
-        "page_title": "Dashboard",
-        "breadcrumbs": [
-            {"name": "Home", "url": "/"},
-            {"name": "Dashboard", "url": "dashboard"},
-        ],
-        'user_form': user_form,
-        'dashboard_form': dashboard_form,
-    })
+    return render(
+        request,
+        "accounts/dashboard.html",
+        {
+            "page_title": "Dashboard",
+            "breadcrumbs": [
+                {"name": "Home", "url": "/"},
+                {"name": "Dashboard", "url": "dashboard"},
+            ],
+            "user_form": user_form,
+            "dashboard_form": dashboard_form,
+        },
+    )
 
 
-
-#====Delete Dashboard
+# ====Delete Dashboard
 # This view handles the deletion of the user's dashboard. It deletes the dashboard and redirects to the
+
 
 def delete_dashboard(request):
     if request.method == "POST":
@@ -95,13 +102,13 @@ def delete_dashboard(request):
         request.user.delete()  # deletes user and dashboard because of cascade
         messages.success(request, "Your account has been deleted.")
         return redirect("home")  # or a goodbye page
-    
-    return render(request, "accounts/delete_dashboard.html", {
-        "page_title": "Delete Account"
-    })
+
+    return render(
+        request, "accounts/delete_dashboard.html", {"page_title": "Delete Account"}
+    )
 
 
-#=====Change Password
+# =====Change Password
 # This view handles the change of the user's password. It checks if the old password is correct
 class DashboardPasswordChangeView(PasswordChangeView):
     template_name = "accounts/change_password.html"
@@ -112,8 +119,7 @@ class DashboardPasswordChangeView(PasswordChangeView):
         return super().form_valid(form)
 
 
-
-#====== Register view with email verification
+# ====== Register view with email verification
 # This view handles the registration of a new user. It checks if the email already exists in the database.
 # If the email is new, it creates a new PendingUser object with a verification code and sends a verification email.
 @redirect_autheticated_user
@@ -142,7 +148,7 @@ def register(request: HttpRequest):
                 defaults={
                     "password": make_password(password),
                     "verification_code": verification_code,
-                   "created_at": datetime.now(timezone.utc), 
+                    "created_at": datetime.now(timezone.utc),
                 },
             )
             # Sending email
@@ -163,10 +169,8 @@ def register(request: HttpRequest):
         return render(request, "accounts/register.html", context=context)
 
 
+# ======= Verify Account
 
-
-
-#======= Verify Account
 
 def verify_account(request: HttpRequest):
 
@@ -191,9 +195,10 @@ def verify_account(request: HttpRequest):
             )
 
 
-#======= Login view
+# ======= Login view
 # This view handles the login of existing users. It checks if the email and password are correct.
 # If the credentials are valid, it logs the user in and redirects them to the home page.
+
 
 @redirect_autheticated_user
 def login(request: HttpRequest):
@@ -221,13 +226,14 @@ def login(request: HttpRequest):
         return render(request, "accounts/login.html", context=context)
 
 
-#======= Logout view
+# ======= Logout view
 def logout(request: HttpRequest):
     auth.logout(request)
     messages.success(request, "You have been logged out")
     return redirect("home")
 
-#====password_reset
+
+# ====password_reset
 def send_password_reset_link(request: HttpRequest):
     if request.method == "POST":
         email: str = request.POST.get("email", "")
@@ -260,7 +266,8 @@ def send_password_reset_link(request: HttpRequest):
     else:
         return render(request, "accounts/forgot_password.html")
 
-#=======verify_password
+
+# =======verify_password
 def verify_password_reset_link(request: HttpRequest):
     email = request.GET.get("email")
     reset_token = request.GET.get("token")
@@ -279,7 +286,8 @@ def verify_password_reset_link(request: HttpRequest):
         context={"email": email, "token": reset_token},
     )
 
-#===========set_new_password
+
+# ===========set_new_password
 def set_new_password_using_reset_link(request: HttpRequest):
     """Set a new password given the token sent to the user email"""
 

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load blog_extras %}
+
 {% block content %}
 <section class="post_section news_post_2">
     <div class="container">
@@ -10,22 +12,33 @@
                 <div class="row feature_post_area">
                     <div class="col-12">
                         <div class="feature_tittle"> 
-                            <h2>Travel Post</h2>
+                            <h2>All Post</h2>
                             <div class="post_select_button"> 
-                                <select class="post_select">
-                                    <option>Travel Post</option>
-                                    <option>Finance Post</option> 
-                                    <option>Trading Post</option> 
-                                    <option>Tech Post</option> 
-                                    <option>Vodeo Post</option> 
+                                <select class="post_select" onchange="if(this.value) window.location.href=this.value;">
+                                    <option value="">-- Select Category --</option>
+                                    {% for category in categories_with_post_count %}
+                                        <option value="{{ category.get_absolute_url }}"
+                                            {% if category_selected and category_selected.id == category.id %}selected{% endif %}>
+                                            {{ category.name }} ({{ category.post_count }})
+                                        </option>
+                                    {% endfor %}
                                 </select>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="col-12">
+                        {% for post in posts %}
                         <div class="media feature_post"> 
                            <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-1.jpg' %}" alt=""></a>  
+                            <a href="{{ post.get_absolute_url }}">
+                                {% if post.post_image and post.post_image.url %}
+                                    <img src="{{ post.post_image.url }}" alt="{{ post.title }}">
+                                {% else %}
+                                    <img src="{% static 'images/post/placeholder.png' %}" alt="Placeholder Image">
+                                {% endif %}
+                                
+                            </a>
                                 <ul class="special_share">
                                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -33,13 +46,15 @@
                                 </ul>
                            </div> 
                             <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+                                <a href="{{ post.get_absolute_url }}" class="f_heding">{{ post.title }}</a>
+                                <h6>{{ post.publish }} <span>|</span><a href="#">
+                                    {{ post.author.email|nice_name }}</a></h6>
+                                <p>{{ post.body }}</p>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <div class="media feature_post"> 
                            <div class="feture_img"> 
                                 <a href="news-details.html"><img src="{% static 'images/post/travel-post-2.jpg' %}" alt=""></a>  
@@ -55,229 +70,9 @@
                                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post border-0"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-3.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">Travel Burnout is Real. Here’s How to Deal <br>with It</a>
-                                <h6>Jan 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-4.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-5.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-6.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-7.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-8.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">This Year, Join Me in a 12-Book Reading <br>Challenge</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-9.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-10.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-11.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-12.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-13.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-14.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="media feature_post"> 
-                           <div class="feture_img"> 
-                                <a href="news-details.html"><img src="{% static 'images/post/travel-post-15.jpg' %}" alt=""></a>  
-                                <ul class="special_share">
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                           </div> 
-                            <div class="media-body feture_content">
-                                <a href="news-details.html" class="f_heding">A Love So Strong Walks Together Through The Mild Fall In High Park</a>
-                                <h6>Dec 10, 2018 at 19:35 <span>|</span><a href="http://emran-khan.com/">Emran Khan</a></h6>
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    </div> -->
+                   
+                  
                     <div class="col-12">
                         <nav class="pagination_area pa_2">
                             <ul class="pagination">
@@ -290,7 +85,9 @@
                     </div>
                 </div> 
             </div>
-            <!-- End left_sidebar -->
+            <!--==== End left_sidebar ==== -->
+
+            <!--====Search====-->
             <div class="col-lg-4 right_sidebar"> 
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search">
@@ -298,57 +95,41 @@
                         <span class="input-group-text"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
+                <!--==End search==-->
+
+                <!--==Categories==-->
                 <div class="categories">
                     <h3>Post Categories</h3>
                     <ul class="cpost_categories">
-                        <li><a href="#" class="active">Business<span>05</span></a></li>
-                        <li><a href="#">Finance & Business<span>04</span></a></li>
-                        <li><a href="#">Technology<span>03</span></a></li>
-                        <li><a href="#">Travel<span>02</span></a></li>
-                        <li><a href="#">All News<span>01</span></a></li>
+                        {% for category in categories_with_post_count %}
+                            <li>
+                                <a href="{{ category.get_absolute_url }}"
+                                   {% if category_selected and category_selected.id == category.id %}class="active"{% endif %}>
+                                    {{ category.name }}
+                                    <span>{{ category.post_count }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
-                </div>  
-                
-                <!-- Latest Bitcoin News -->
+                </div> 
+                <!--==End Categories==-->
+
+                <!--==== Trending News ====-->
                 <div class="latest_news_widget p-0">
                     <h2>Trending News</h2>
                     <div class="widget"> 
                         <a href="news-details.html"><img src="{% static 'images/post/lnw-1.jpg' %}" alt=""></a>
                         <a href="news-details.html" class="w_heding">Envion – Digital Currency Mint in Exploits World’s Lowest Cost Power</a>
                     </div>
-                    <div class="widget"> 
-                        <a href="news-details.html"><img src="{% static 'images/post/lnw-2.jpg' %}" alt=""></a>
-                        <a href="news-details.html" class="w_heding">Bitcoin Cash Price Hits Record $2,500 to pierce $300 billion for the first time</a>
-                    </div>
-                    <div class="widget border-0"> 
-                        <a href="news-details.html"><img src="{% static 'images/post/lnw-3.jpg' %}" alt=""></a>
-                        <a href="news-details.html" class="w_heding">HOLD the Kitten! New Year Gift for Every Crypto Cuttie</a>
-                    </div>
+                    
+                  
                     <a href="news.html" class="load_more_btn">Load more..</a>
                 </div> 
-                <!-- Text widget -->
-                <div class="text_widget_area">
-                   <div class="text_widget"> 
-                        <a href="news-details.html">How to secure peace of mind and income that beats banks</a>
-                        <h6>10:29, Press Releases</h6>
-                   </div>
-                   <div class="text_widget"> 
-                        <a href="news-details.html">Token Launch Date Announced for Dether, World’s First Peer-To-Peer Ecosystem of Crypto Buyers, Sellers, and Shops</a>
-                        <h6>12:59, Press Releases</h6>
-                   </div>
-                   <div class="text_widget"> 
-                        <a href="news-details.html">Buffett Warns Investors That Safe-Looking Bonds Can Be Risky</a>
-                        <h6>2:37, Press Releases</h6>
-                   </div>
-                   <div class="text_widget m-0"> 
-                        <a href="news-details.html">Falls Below $16,400, Loses Nearly 15% in Major Correction</a>
-                        <h6 class="padding-bottom-0">11:38, Press Releases</h6>
-                   </div>
-                </div>
-                <!-- Advertisement -->
-                <div class="advertisement">
-                    <a href="#"><img src="{% static 'images/advertisement-1.jpg' %}" alt=""></a> 
-                </div> 
+                <!-- ======End Trending News ====== -->
+
+
+              
+                
                 <!-- Video widget -->
                 <div class="video_widget">
                     <div class="watch_video">
@@ -358,63 +139,10 @@
                         </a>
                         <a href="video-details.html" class="video_heding">The easiest way to buy Bitcoin and Ethereum</a>
                     </div>
+                    <a href="news.html" class="load_more_btn">Load more..</a>
                 </div> 
-                <!-- Social Sidget -->
-                <ul class="social_widget">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#" class="pinterest"><i class="fa fa-pinterest"></i></a></li>
-                    <li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="#" class="google"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
-                </ul> 
-                <!-- Tabs Widget -->
-                <div class="tabs_widge">  
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="active" id="nav-home-tab" data-toggle="tab" href="#technology" role="tab">Technology</a>
-                        <a id="nav-profile-tab" data-toggle="tab" href="#gaming" role="tab">Gaming</a> 
-                    </div> 
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active text_widget_area" id="technology" role="tabpanel"> 
-                            <!-- Text widget --> 
-                           <div class="text_widget"> 
-                                <a href="news-details.html">How to secure peace of mind and income that beats banks</a>
-                                <h6>10:29, Press Releases <span class="tech">Technology</span></h6>
-                           </div>
-                           <div class="text_widget"> 
-                                <a href="news-details.html">Token Launch Date Announced for Dether, World’s First Peer-To-Peer Ecosystem of Crypto Buyers, Sellers, and Shops</a>
-                                <h6>12:59, Press Releases <span class="hot">Hot</span></h6>
-                           </div>
-                           <div class="text_widget"> 
-                                <a href="news-details.html">Buffett Warns Investors That Safe-Looking Bonds Can Be Risky</a>
-                                <h6>2:37, Press Releases <span class="gaming">Gaming</span></h6>
-                           </div>
-                           <div class="text_widget m-0"> 
-                                <a href="news-details.html">Falls Below $16,400, Loses Nearly 15% in Major Correction</a>
-                                <h6 class="padding-bottom-0">11:38, Press Releases <span>Fashion</span></h6>
-                           </div> 
-                        </div>
-                        <div class="tab-pane fade text_widget_area" id="gaming" role="tabpanel">  
-                            <!-- Text widget --> 
-                           <div class="text_widget"> 
-                                <a href="news-details.html">Buffett Warns Investors That Safe-Looking Bonds Can Be Risky</a>
-                                <h6>2:37, Press Releases <span class="gaming">Gaming</span></h6>
-                           </div>
-                           <div class="text_widget m-0"> 
-                                <a href="news-details.html">Falls Below $16,400, Loses Nearly 15% in Major Correction</a>
-                                <h6 class="padding-bottom-0">11:38, Press Releases <span>Fashion</span></h6>
-                           </div> 
-                           <div class="text_widget"> 
-                                <a href="news-details.html">How to secure peace of mind and income that beats banks</a>
-                                <h6>10:29, Press Releases <span class="tech">Technology</span></h6>
-                           </div>
-                           <div class="text_widget"> 
-                                <a href="news-details.html">Token Launch Date Announced for Dether, World’s First Peer-To-Peer Ecosystem of Crypto Buyers, Sellers, and Shops</a>
-                                <h6>12:59, Press Releases <span class="hot">Hot</span></h6>
-                           </div>
-                        </div> 
-                    </div>
-                </div>
+                
+                
             </div>
         </div>
     </div>

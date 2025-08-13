@@ -90,6 +90,7 @@ def test_verify_account_invalid_code():
 
 # Test for login with valid credentials
 
+
 def test_login_valid_credentials(client: Client, user_instance):
     url = reverse("login")
 
@@ -119,9 +120,11 @@ def test_login_invalid_credentials(client: Client, user_instance):
     assert messages[0].level_tag == "error"
     assert "invalid" in str(messages[0]).lower()
 
-#Dashboard Testing
 
-#Create dashboard
+# Dashboard Testing
+
+
+# Create dashboard
 def test_dashboard_created_for_authenticated_users(client, user_instance):
     """
     Ensure that when a user is created, the post_save signal creates a Dashboard
@@ -141,7 +144,7 @@ def test_dashboard_created_for_authenticated_users(client, user_instance):
     assert str(user_instance.email) in response.content.decode()
 
 
-#Update dashboard
+# Update dashboard
 def test_user_can_update_dashboard(client, user_instance, dashboard_update_data):
     client.force_login(user_instance)
 
@@ -149,14 +152,15 @@ def test_user_can_update_dashboard(client, user_instance, dashboard_update_data)
     response = client.post(url, dashboard_update_data)
     assert response.status_code == 302  # redirect after update
 
-  
     dashboard = Dashboard.objects.get(user=user_instance)
     assert dashboard.country == "NG"
     assert dashboard.city == "Lagos"
 
 
-#Delete account/Dashboard   
-def test_user_can_delete_account_from_dashboard(client, user_instance, django_user_model):
+# Delete account/Dashboard
+def test_user_can_delete_account_from_dashboard(
+    client, user_instance, django_user_model
+):
     client.force_login(user_instance)
 
     url = reverse("delete_dashboard")  # match your view name
@@ -167,14 +171,14 @@ def test_user_can_delete_account_from_dashboard(client, user_instance, django_us
     assert not django_user_model.objects.filter(id=user_instance.id).exists()
 
 
-#Can change password from dashboard   
+# Can change password from dashboard
 def test_user_can_change_password_from_dashboard(client, user_instance):
     # Login using fixture-provided user
     client.force_login(user_instance)
 
     url = reverse("change_password")
     data = {
-        "old_password": "testpassword123",   # must match password in your fixture
+        "old_password": "testpassword123",  # must match password in your fixture
         "new_password1": "newsecurepass456",
         "new_password2": "newsecurepass456",
     }
@@ -189,19 +193,17 @@ def test_user_can_change_password_from_dashboard(client, user_instance):
     # Confirm password was updated
     client.logout()
     assert client.login(email=user_instance.email, password="newsecurepass456") is True
-  
 
 
-#=======Password testing======
-#Test   test_initiate_password_reset_using_registered_email
+# =======Password testing======
+# Test   test_initiate_password_reset_using_registered_email
 def test_initiate_password_reset_using_registered_email(client: Client, user_instance):
     url = reverse("reset_password_via_email")
     data = {"email": user_instance.email}
     response = client.post(url, data)
     assert response.status_code == 302
     assert Token.objects.get(
-        user__email=data["email"], token_type=Token.TokenType
-        .PASSWORD_RESET
+        user__email=data["email"], token_type=Token.TokenType.PASSWORD_RESET
     )
 
     messages = list(get_messages(response.wsgi_request))
@@ -209,7 +211,8 @@ def test_initiate_password_reset_using_registered_email(client: Client, user_ins
     assert messages[0].level_tag == "success"
     assert str(messages[0]) == "Reset link sent to your email"
 
-#test_initiate_password_reset_using_unregistered_email
+
+# test_initiate_password_reset_using_unregistered_email
 def test_initiate_password_reset_using_unregistered_email(client: Client):
     url = reverse("reset_password_via_email")
     data = {"email": "notregistered@gmail.com"}
@@ -224,7 +227,8 @@ def test_initiate_password_reset_using_unregistered_email(client: Client):
     assert messages[0].level_tag == "error"
     assert str(messages[0]) == "Email not found"
 
-#test_set_new_password_using_valid_reset_token
+
+# test_set_new_password_using_valid_reset_token
 def test_set_new_password_using_valid_reset_token(client: Client, user_instance):
     url = reverse("set_new_password")
     reset_token = Token.objects.create(
@@ -253,6 +257,7 @@ def test_set_new_password_using_valid_reset_token(client: Client, user_instance)
     assert len(messages) == 1
     assert messages[0].level_tag == "success"
     assert str(messages[0]) == "Password changed."
+
 
 # test_set_new_password_using_valid_reset_token
 def test_set_new_password_using_invalid_reset_token(client: Client, user_instance):

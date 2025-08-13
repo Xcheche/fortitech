@@ -37,7 +37,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'widget_tweaks',
+    "widget_tweaks",
     "crispy_forms",
     "crispy_bootstrap5",
 ]
@@ -52,7 +52,6 @@ THIRD_PARTY_APPS = [
     # External apps/packages
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
-
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -83,6 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "blog.context_processors.categories_with_post_count",
             ],
         },
     },
@@ -155,10 +155,10 @@ AUTH_USER_MODEL = "accounts.User"
 
 
 # Email config
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" #for console
-#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
 
-#Mailpit
+# Mailpit
 EMAIL_HOST = "localhost"  # Mailpit host
 EMAIL_PORT = 1025  # Mailpit SMTP port
 EMAIL_HOST_USER = ""  # No auth needed

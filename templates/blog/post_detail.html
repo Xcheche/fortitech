@@ -18,11 +18,15 @@
                             <h6><span>{{ post.publish }}</span> <a href="#">
                                 {{ post.author.email|nice_name }}</a> <a href="#" class="investing">{{ post.category }}</a></h6>
                             <a href="news-details.html" class="news_heding">{{ post.title }}</a>
-                            {% if post.post_image and post.post_image.url %}
-                            <img src="{{ post.post_image.url }}" alt="">
-                            {% else %}
-                            <img src="{% static 'images/post/placeholder.png' %}" alt="Placeholder Image">
-                            {% endif %}
+                            <!-- Authors Image -->
+                            {% if post.author and post.author.profile_picture %}
+    <img src="{{ post.author.profile_picture.url }}" alt="authors image" class="rounded-circle" style="width: 100px; height: 100px;">
+{% else %}
+    <img src="{% static 'images/default.png' %}" alt="Placeholder Image">
+{% endif %}
+
+                            <!--End of Authors image-->
+
                             <p class="fast_p">{{ post.body }}</p>
                             <div class="share_row row">
                                 <div class="col-sm-6 share_area">
@@ -49,6 +53,8 @@
                                     <p>The payments are made directly from one person to another without passing through a central bank or clearing house.</p>
                                     <h6>22 feb,2018</h6>
                                     <a href="#" class="reply_btn">Reply</a>
+                                    <a href="#" class="reply_btn">Edit</a>
+                                    <a href="#" class="reply_btn">Delete</a>
                                 </div>
                             </div>
                         </div>

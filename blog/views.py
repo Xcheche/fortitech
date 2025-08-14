@@ -1,23 +1,26 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from blog.models import Category, Post
+from django.core.paginator import Paginator 
+from django.views.generic import ListView
 
 # Create your views here.
-
-
-def home(request):
-
-    context = {
-        "posts": Post.published.all().order_by("-created_at"),
-        "page_title": "Home",
-        "breadcrumbs": [
-            {"name": "Home", "url": "/"},  # The current page is 'Home'
-            {"name": "Home", "url": "Home"},
-        ],
-    }
-    return render(request, "blog/index.html", context)
-
-
+class HomeView(ListView):
+    model = Post
+    template_name = "blog/index.html"
+    context_object_name = "posts"
+    paginate_by = 2
+    
+    def get_queryset(self):
+        return Post.published.all().order_by("-created_at")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Home"
+        context["breadcrumbs"] = [
+            {"name": "Home", "url": None},  # Fixed: No URL for current page
+        ]
+        return context
 # Category view
 # This view will filter posts by the selected category
 def posts_by_category(request, slug):

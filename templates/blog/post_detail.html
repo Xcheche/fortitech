@@ -4,138 +4,167 @@
 
 {% block content %}
 
+<!-- Post section -->
+<section class="post_section news_post">
+    <div class="container">
+        <div class="row post_section_inner">
 
+            <!-- Left Column: Post + Comments -->
+            <div class="col-lg-8">  
+                <div class="news_left_sidebar">
 
-    <!-- Post section -->
-    <section class="post_section news_post">
-        <div class="container">
-            <div class="row post_section_inner">
-                <!-- Left_sidebar --> 
-                <div class="col-lg-8">  
-                    <div class="news_left_sidebar">
-                        <!-- News Item -->
-                        <div class="news_item news_details">
-                            <h6><span>{{ post.publish }}</span> <a href="#">
-                                {{ post.author.email|nice_name }}</a> <a href="#" class="investing">{{ post.category }}</a></h6>
-                            <a href="news-details.html" class="news_heding">{{ post.title }}</a>
-                            <!-- Authors Image -->
-                            {% if post.author and post.author.profile_picture %}
-    <img src="{{ post.author.profile_picture.url }}" alt="authors image" class="rounded-circle" style="width: 100px; height: 100px;">
-{% else %}
-    <img src="{% static 'images/default.png' %}" alt="Placeholder Image">
-{% endif %}
+                    <!-- News Item -->
+                    <div class="news_item news_details">
+                        <h6>
+                            <span>{{ post.publish }}</span>
+                            <a href="#">{{ post.author.email|nice_name }}</a>
+                            <a href="#" class="investing">{{ post.category }}</a>
+                        </h6>
+                        <a href="news-details.html" class="news_heding">{{ post.title|safe }}</a>
 
-                            <!--End of Authors image-->
+                        {% if post.author.dashboard.profile_picture %}
+                            <img src="{{ post.author.dashboard.profile_picture.url }}" alt="Author Image" class="rounded-circle" style="width:100px; height:100px;">
+                        {% else %}
+                            <img src="{% static 'images/default.png' %}" alt="Placeholder Image">
+                        {% endif %}
 
-                            <p class="fast_p">{{ post.body }}</p>
-                            <div class="share_row row">
-                                <div class="col-sm-6 share_area">
-                                    <ul>
-                                        <li>Share:</li>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6 back_to"><a href="/"><i class="fa fa-arrow-left"></i>Back to blog</a></div> 
-                               
+                        <p class="fast_p">{{ post.body|safe }}</p>
+
+                        <div class="share_row row">
+                            <div class="col-sm-6 share_area">
+                                <ul>
+                                    <li>Share:</li>
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 back_to">
+                                <a href="/"><i class="fa fa-arrow-left"></i>Back to blog</a>
                             </div> 
                         </div> 
-                                            <div class="comment_area">
-                            <h2>Comment (3)</h2>
-                            <div class="media">
-                                <div class="media-left"> 
-                                    <img src="images/post/author-2.jpg" alt="" class=" rounded-circle">
-                                    <a href="#">Asfia Asfia</a>
+                    </div> 
+
+                    <!-- Comments -->
+                    <div class="comment_area">
+                        <h2>Comments ({{ comments.count }})</h2>
+                        {% for comment in comments %}
+                            <div class="media mb-4">
+                                <div class="media-left">
+                                    {% if comment.author.dashboard.profile_picture %}
+                                    <img src="{{ comment.author.dashboard.profile_picture.url }}" 
+                                         alt="{{ comment.author.username }}" 
+                                         class="rounded-circle" height="50" width="50">
+                                {% else %}
+                                    <img src="{% static 'images/default.png' %}" 
+                                         alt="Default Image" 
+                                         class="rounded-circle" height="50" width="50">
+                                {% endif %}
+                                
+                                    <!-- Author Name -->
+                                    <a href="#">{{ comment.author.email|nice_name }}</a>
                                 </div>
                                 <div class="media-body">
-                                    <p>The payments are made directly from one person to another without passing through a central bank or clearing house.</p>
-                                    <h6>22 feb,2018</h6>
-                                    <a href="#" class="reply_btn">Reply</a>
-                                    <a href="#" class="reply_btn">Edit</a>
-                                    <a href="#" class="reply_btn">Delete</a>
+                                    <p>{{ comment.body|safe }}</p>
+                                    <h6>{{ comment.created_at|date:"d M, Y" }}</h6>
+
+                                    <!--======Reply=====-->
+                                    <a href="?reply_to={{ comment.id }}#comment-form" class="reply_btn">Reply</a>
+
+                                    {% for reply in comment.replies.all %}
+                                        <div class="media mt-3 ml-5">
+                                            <div class="media-left">
+                                                {% if reply.author.dashboard.profile_picture %}
+                                                <img src="{{ reply.author.dashboard.profile_picture.url }}" 
+                                                     alt="{{ reply.author.username }}" 
+                                                     class="rounded-circle" height="40" width="40">
+                                            {% else %}
+                                                <img src="{% static 'images/default.png' %}" 
+                                                     alt="Default Image" 
+                                                     class="rounded-circle" height="40" width="40">
+                                            {% endif %}
+                                            
+                                                <a href="#">{{ reply.author.email|nice_name }}</a>
+                                            </div>
+                                            <div class="media-body">
+                                                <p>{{ reply.body|safe }}</p>
+                                                <h6>{{ reply.created_at|date:"d M, Y" }}</h6>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                        <div class="leave_reply"> 
-                           <h2>Leave a Reply</h2>
-                            <form class="row login_from">  
-                                <div class="form-group col-12">
-                                    <textarea class="form-control" id="message" name="message" placeholder="Your Comment"></textarea>
-                                </div>
-                                <div class="form-group col-12">   
-                                    <input type="text" class="form-control" placeholder="Name"> 
-                                </div> 
-                                <div class="form-group col-12">
-                                    <input type="email" class="form-control" name="email" placeholder="Email">
-                                </div> 
-                                <div class="form-group larg_btn col-12">
-                                    <button class="sm_btn" type="submit">Submit Reply <i class="fa fa-arrow-right"></i></button> 
-                                </div>     
-                            </form>  
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- End left_sidebar -->
-                <div class="col-lg-4 right_sidebar">  
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        </div>
+                        {% endfor %}
                     </div>
 
-                    
-                    <!--==Categories==-->
-                    <div class="categories">
-                        <h3>Post Categories</h3>
-                        <ul class="cpost_categories">
-                            <li><a href="#" class="active">Business<span>05</span></a></li>
-                            <li><a href="#">Finance & Business<span>04</span></a></li>
-                            
-                        </ul>
-                    </div>  
-                    <!--==End Categories==-->
-    
-                    <!--==== Trending News ====-->
-                    <div class="latest_news_widget p-0">
-                        <h2>Trending News</h2>
-                        <div class="widget"> 
-                            <a href="news-details.html"><img src="{% static 'images/post/lnw-1.jpg' %}" alt=""></a>
-                            <a href="news-details.html" class="w_heding">Envion – Digital Currency Mint in Exploits World’s Lowest Cost Power</a>
-                        </div>
-                        
-                      
-                        <a href="news.html" class="load_more_btn">Load more..</a>
-                    </div> 
-                    <!-- ======End Trending News ====== -->
-    
-    
-                  
-                    
-                    <!-- Video widget -->
-                    <div class="video_widget">
-                        <div class="watch_video">
-                            <a href="video-details.html" class="video_thumbnail">
-                                <img src="{% static 'images/post/wathc-5.jpg' %}" alt="">
-                                <span class="play_btn"><i class="flaticon-play-button">5.16</i></span>
-                            </a>
-                            <a href="video-details.html" class="video_heding">The easiest way to buy Bitcoin and Ethereum</a>
-                        </div>
-                    </div> 
-                    
-                    
+                    <!-- Comment Form -->
+                    <div class="leave_reply" id="comment-form">
+                        <h2>
+                            {% if reply_to %}
+                                Reply to {{ reply_to.author.email|nice_name }}
+                            {% else %}
+                                Leave a Comment
+                            {% endif %}
+                        </h2>
+                        <form method="post" class="row login_from">
+                            {% csrf_token %}
+                            <div class="form-group col-12">
+                                {{ form.body }}
+                            </div>
+
+                            {% if reply_to %}
+                                <input type="hidden" name="parent_id" value="{{ reply_to.id }}">
+                            {% endif %}
+
+                            <div class="form-group larg_btn col-12">
+                                <button class="sm_btn" type="submit">
+                                    Submit <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
-        </div>
 
+            <!-- Right Column: Sidebar -->
+            <div class="col-lg-4 right_sidebar">  
 
+                <!-- Search -->
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
 
+                <!-- Categories -->
+                <div class="categories mb-3">
+                    <h3>Post Categories</h3>
+                    <ul class="cpost_categories">
+                        {% for category in categories_with_post_count %}
+                            <li>
+                                <a href="{{ category.get_absolute_url }}"
+                                   {% if category_selected and category_selected.id == category.id %}class="active"{% endif %}>
+                                    {{ category.name }}
+                                    <span>{{ category.post_count }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>  
 
+                <!-- Trending / Popular -->
+                {% include 'blog/popular.html' %}
 
+                <!-- News -->
+                {% include 'blog/news.html' %}
 
+            </div>
 
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
 
 {% endblock %}

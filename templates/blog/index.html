@@ -29,7 +29,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div id="post-list" class="col-12">
                         {% for post in posts %}
                         <div class="media feature_post"> 
                            <div class="feture_img"> 
@@ -51,7 +51,7 @@
                                 <a href="{{ post.get_absolute_url }}" class="f_heding">{{ post.title }}</a>
                                 <h6>{{ post.publish }} <span>|</span><a href="#">
                                     {{ post.author.email|nice_name }}</a></h6>
-                                <p>{{ post.body }}</p>
+                                <p>{{ post.body|safe|truncatechars:50 }}</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -77,7 +77,16 @@
                   
                     <div class="col-12">
                        
-                        <a href="" class="load_more_btn">Load more..</a>
+                        {% if posts.has_next %}
+                        <a href="#"
+                        id="load-more-btn"
+                        class="load_more_btn"
+                        data-next-page="{{ posts.next_page_number }}"
+                        {% if category_selected %}data-category="{{ category_selected.id }}"{% endif %}>
+                        Load more..
+                     </a>
+                    {% endif %}
+                    
                  
                     </div>
                 </div> 
@@ -111,33 +120,11 @@
                 </div> 
                 <!--==End Categories==-->
 
-                <!--==== Trending News ====-->
-                <div class="latest_news_widget p-0">
-                    <h2>Trending News</h2>
-                    <div class="widget"> 
-                        <a href="news-details.html"><img src="{% static 'images/post/lnw-1.jpg' %}" alt=""></a>
-                        <a href="news-details.html" class="w_heding">Envion – Digital Currency Mint in Exploits World’s Lowest Cost Power</a>
-                    </div>
-                    
-                  
-                    <a href="news.html" class="load_more_btn">Load more..</a>
-                </div> 
-                <!-- ======End Trending News ====== -->
-
-
+               {% include 'blog/popular.html' %}
               
                 
                 <!-- Video widget -->
-                <div class="video_widget">
-                    <div class="watch_video">
-                        <a href="video-details.html" class="video_thumbnail">
-                            <img src="{% static 'images/post/wathc-5.jpg' %}" alt="">
-                            <span class="play_btn"><i class="flaticon-play-button">5.16</i></span>
-                        </a>
-                        <a href="video-details.html" class="video_heding">The easiest way to buy Bitcoin and Ethereum</a>
-                    </div>
-                    <a href="news.html" class="load_more_btn">Load more..</a>
-                </div> 
+                {% include 'blog/news.html' %}
                 
                 
             </div>
@@ -145,4 +132,64 @@
     </div>
 </section>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postList = document.getElementById('post-list');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+    
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function(event) {
+                event.preventDefault(); // stop link from refreshing the page
+    
+                const nextPage = this.dataset.nextPage;
+                const categoryId = this.dataset.category || ''; // optional category filter
+    
+                let url = `?page=${nextPage}`;
+                if (categoryId) {
+                    url = `?category=${categoryId}&page=${nextPage}`;
+                }
+    
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+    
+                        // Append only post items
+                        const newPosts = doc.querySelectorAll('#post-list .media.feature_post');
+                        newPosts.forEach(post => postList.appendChild(post));
+    
+                        // Update button or remove it if no more pages
+                        const newBtn = doc.querySelector('#load-more-btn');
+                        if (newBtn) {
+                            loadMoreBtn.dataset.nextPage = newBtn.dataset.nextPage;
+                        } else {
+                            loadMoreBtn.remove();
+                        }
+                    });
+            });
+        }
+    });
+    </script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 {% endblock %}

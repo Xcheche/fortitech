@@ -6,6 +6,9 @@ from .manager import CustomUserManager
 from common.models import BaseModel
 from django_countries.fields import CountryField
 from PIL import Image
+from ckeditor.fields import RichTextField
+from cloudinary import CloudinaryImage
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
@@ -100,10 +103,17 @@ class Dashboard(models.Model):
 
     post_code = models.CharField(max_length=100, blank=True, null=True)
 
-    profile_picture = models.ImageField(
-        upload_to="profile_pictures/%Y/%m/%d/",
+    # profile_picture = models.ImageField(
+    #     upload_to="profile_pictures/%Y/%m/%d/",
+    #     null=True,
+    #     blank=True,
+    # )
+    profile_picture = CloudinaryField(
+        "dashboard",
+        folder="cyberguard_blog_profile_images/",
         null=True,
         blank=True,
+        transformation={"width": 200, "height": 200, "crop": "fill"},
     )
 
     def __str__(self):
@@ -114,14 +124,26 @@ class Dashboard(models.Model):
         verbose_name_plural = "Dashboard"
 
     # Resizing profile_picture automatically
-    def save(self, *args, **kwargs):
-        # Call the parent save method with all arguments
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # Call the parent save method with all arguments
+    #     super().save(*args, **kwargs)
 
-        # Resize the profile_picture
-        if self.profile_picture:
-            img = Image.open(self.profile_picture.path)
-            if img.height > 300 or img.width > 300:
-                output_size = (300, 300)
-                img.thumbnail(output_size)
-                img.save(self.profile_picture.path)
+    #     # Resize the profile_picture
+    #     if self.profile_picture:
+    #         img = Image.open(self.profile_picture.path)
+    #         if img.height > 300 or img.width > 300:
+    #             output_size = (300, 300)
+    #             img.thumbnail(output_size)
+    #             img.save(self.profile_picture.path)
+    # Resizing profile_picture automatically
+    def save(self, *args, **kwargs):
+    # Call the parent save method with all arguments
+     super().save(*args, **kwargs)
+
+    # Commented out because CloudinaryField doesn't have .path
+    # if self.profile_picture:
+    #     img = Image.open(self.profile_picture.path)
+    #     if img.height > 300 or img.width > 300:
+    #         output_size = (300, 300)
+    #         img.thumbnail(output_size)
+    #         img.save(self.profile_picture.path)

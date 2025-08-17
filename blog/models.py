@@ -1,6 +1,8 @@
 from django.utils import timezone
 from django.db import models
-
+from ckeditor.fields import RichTextField
+from cloudinary import CloudinaryImage
+from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.urls import reverse
 from common.models import BaseModel
@@ -43,8 +45,16 @@ class Post(BaseModel):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category"
     )
-    post_image = models.ImageField(
-        upload_to="post_images/%Y/%m/%d/", blank=True, null=True
+    # post_image = models.ImageField(
+    #     upload_to="post_images/%Y/%m/%d/", blank=True, null=True
+    # )
+    post_image = CloudinaryField(
+        "post_image",
+        folder="cyberguard_blog_images/",
+        blank=True,
+        null=True,
+        # This is the transformation for the image
+        transformation={"width": 300, "height": 200, "crop": "fill"},
     )
     publish = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
@@ -52,11 +62,12 @@ class Post(BaseModel):
         on_delete=models.CASCADE,
         related_name="blog_post",
     )
-    body = models.TextField()
+    body = RichTextField(blank=False)
 
     status = models.CharField(
         max_length=2, choices=Status.choices, default=Status.DRAFT
     )
+    views_count = models.PositiveIntegerField(default=0)
 
     # Metadata for the post
     class Meta:
@@ -68,8 +79,7 @@ class Post(BaseModel):
 
     def __str__(self):
         return self.title
-    
- 
+
     # Get absolute url using args positional arguments or kwargs keyword arguments could be used
     # Canonical URL for the post
     def get_absolute_url(self):
@@ -82,3 +92,29 @@ class Post(BaseModel):
                 "day": self.publish.day,
             },
         )
+
+
+#Comment
+class Comment(BaseModel):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="comments"
+    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    parent = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        related_name="replies",
+        on_delete=models.CASCADE
+    )
+    
+
+    class Meta:
+        ordering = ["created_at"]
+        verbose_name_plural = "Comments"
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.post}"

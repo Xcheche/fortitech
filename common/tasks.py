@@ -12,7 +12,7 @@
 #     msg.send(fail_silently=False)
 
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.utils.html import strip_tags
 
 
@@ -37,6 +37,7 @@ def send_email(subject: str, email_to: list[str], html_template, context):
 
 
 # =====Welcome email for signal
+# =========================================
 def send_welcome_emails(user):
     """
     Sends a welcome email to a new user and a notification email to the site owner.
@@ -78,3 +79,74 @@ def send_welcome_emails(user):
     except Exception as e:
         # Log the error or handle it as needed
         print(f"Error sending welcome emails: {e}")
+
+
+# ============contact form email=========
+# ========================================
+
+
+def send_contact_email(contact):
+    """
+    Sends a contact form submission email:
+    - One email goes to the site owner.
+    - One confirmation email goes to the client.
+    """
+
+    # 🔹 Site owner's email
+    owner_email = "cypherguard@example.com"
+
+    try:
+        # === 1) Send email to OWNER ===
+        owner_context = {"contact": contact}
+        owner_html = render_to_string("emails/contact_owner.html", owner_context)
+
+        owner_subject = "📩 New Contact Form Submission"
+        owner_email_message = EmailMultiAlternatives(
+            subject=owner_subject,
+            body=owner_html,
+            from_email="cypher-guard-reply@example.com",
+            to=[owner_email],
+        )
+        owner_email_message.attach_alternative(owner_html, "text/html")
+        owner_email_message.send()
+
+        # === 2) Send confirmation email to CLIENT ===
+        client_context = {"contact": contact}
+        client_html = render_to_string("emails/contact_client.html", client_context)
+
+        client_subject = "✅ Thanks for contacting us"
+        client_email_message = EmailMultiAlternatives(
+            subject=client_subject,
+            body=client_html,
+            from_email="cypher-guard-reply@example.com",
+            to=[contact.email],  # assumes your model has "email" field
+        )
+        client_email_message.attach_alternative(client_html, "text/html")
+        client_email_message.send()
+
+        print("Both owner and client emails sent successfully.")
+
+    except Exception as e:
+        print(f"Error sending contact emails: {e}")
+
+    """
+    Sends a contact form submission email to the site owner.
+    """
+    # Define the context for the contact email
+    context = {
+        "contact": contact,
+    }
+
+    # Replace with the actual email of your site owner
+    owner_email = "cypherguard@example.com"
+
+    try:
+        send_email(
+            subject="New Contact Form Submission",
+            email_to=[owner_email],
+            html_template="emails/contact_owner.html",
+            context=context,
+        )
+    except Exception as e:
+        # Log the error or handle it as needed
+        print(f"Error sending contact email: {e}")

@@ -1,0 +1,41 @@
+<!--==== Trending News ====-->
+<div class="latest_news_widget p-0">
+    <h2>Popular Post</h2>
+    <div class="widget">
+        <div id="popular-posts-carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for p in popular_posts %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <a href="{{ p.get_absolute_url }}">{{ p.title|truncatewords:5 }}</a>
+                    </div>
+                {% empty %}
+                    <div class="carousel-item active">
+                        <p>No trending news yet.</p>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if popular_posts|length > 1 %}
+            <a class="carousel-control-prev" href="#popular-posts-carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#popular-posts-carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    // Bootstrap carousel auto-slide (optional)
+    document.addEventListener('DOMContentLoaded', function() {
+        var carousel = document.getElementById('popular-posts-carousel');
+        if (carousel) {
+            $(carousel).carousel({
+                interval: 3000
+            });
+        }
+    });
+</script>
+<!-- ======End Trending News ====== -->

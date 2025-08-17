@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📩 New Contact Submission</h2>
+        <p><strong>Name:</strong> {{ contact.name }}</p>
+        <p><strong>Email:</strong> {{ contact.email }}</p>
+        <p><strong>Phone:</strong> {{ contact.phone }}</p>
+        <p><strong>Purpose:</strong> {{ contact.purpose }}</p>
+        <p><strong>Message:</strong></p>
+        <p>{{ contact.message }}</p>
+    </div>
+</body>
+</html>

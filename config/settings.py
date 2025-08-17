@@ -11,6 +11,30 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+
+# ======== Cloudinary Configuration from Environment Variables======
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +44,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-wd#3=u23si3_*9@7-gia*b2s8slv&^mhmsj#54c0yidjsq7(q^"
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['noahide.com', 'www.noahide.com']
+ALLOWED_HOSTS = ["*"]  # Allow all hosts for development purposes
+# Corrected name
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
 
 
 # Application definition
@@ -50,6 +80,10 @@ PROJECT_APPS = [
 ]
 THIRD_PARTY_APPS = [
     # External apps/packages
+    "cloudinary",
+    "cloudinary_storage",
+    "whitenoise",
+    "ckeditor",
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -62,6 +96,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -94,13 +129,29 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST"),
+        "PORT": os.getenv("DATABASE_PORT"),
+        "OPTIONS": {
+            "sslmode": os.getenv(
+                "DATABASE_SSLMODE", "require"
+            ),  # Default to 'require' if not set
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -146,6 +197,40 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# WhiteNoise static files storage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# Upload path for ckeditor
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 300,
+        "width": 700,
+    }
+}
+
+
+# Default message storage (session storage)
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+
+# Customize message tags for Bootstrap compatibility
+
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: "alert-info",
+    message_constants.INFO: "alert-info",
+    message_constants.SUCCESS: "alert-success",
+    message_constants.WARNING: "alert-warning",
+    message_constants.ERROR: "alert-danger",
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -155,8 +240,8 @@ AUTH_USER_MODEL = "accounts.User"
 
 
 # Email config
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
 
 # Mailpit
 EMAIL_HOST = "localhost"  # Mailpit host
@@ -165,4 +250,11 @@ EMAIL_HOST_USER = ""  # No auth needed
 EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = "no-reply@example.com"
+DEFAULT_FROM_EMAIL = "cypherguard@example.com"
+
+
+# Import local settings if available
+try:
+    from .local_settings import *
+except ImportError:
+    print("No local settings found. Looks like you are in production.")

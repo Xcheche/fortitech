@@ -4,7 +4,7 @@
    <div class="container">
         <div class="header_menu"> 
             <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="/"><img src="{% static 'images/cypherguard.png' %} " alt="" height="70px"></a>
+                <a class="navbar-brand" href="/"><img src="{% static 'images/c.png' %} " alt="" height="70px"></a>
                 <!-- Small Divice Menu-->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar_supported"  aria-expanded="false" aria-label="Toggle navigation"> 
                     <i class="fa fa-bars" aria-hidden="true"></i>
@@ -16,7 +16,7 @@
                            <a href="/">Cypher Guard</a>
                            
                         </li>  
-                        <li><a class="nav-link" href="about.html">About us</a></li> 
+                        <li><a class="nav-link" href="{% url 'about' %}">About us</a></li> 
                         {% if user.is_authenticated %} 
                         <li class="dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">BLog</a>
@@ -39,24 +39,24 @@
                       
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">account</a>
                             <ul class="dropdown-menu">  
-                                <li class="dropdown">
+                                <!-- <li class="dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">Sub Menu</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a href="#" class="active">-Sub Menu v1</a></li>
                                         <li><a href="#">-Sub Menu v2</a></li> 
                                         <li><a href="#">-Sub Menu v3</a></li> 
                                     </ul>
-                                </li>
+                                </li> -->
                                
                                 <li><a href="{% url 'register'  %}">Register</a></li> 
                                 <li><a href="{% url 'login' %}">Login</a></li> 
-                                <li><a href="error.html">Error (404)</a></li>
+                                <!-- <li><a href="error.html">Error (404)</a></li> -->
                             </ul>
                             {% endif %}
                         </li>   
                         <li><a class="nav-link" href="{% url 'contact' %}">Contact us</a></li> 
                         <!-- Pages Heder Area --> 
-                        <div class="container " style="height: 100px;">
+                        <!-- <div class="container " style="height: 100px;">
                             <div class="pages_heder">
                                 
                                 <h2>{{ page_title }}</h2>
@@ -65,7 +65,7 @@
                                   
                                 </ol>
                             </div>
-                        </div> 
+                        </div>  -->
                         <!-- End Pages Heder Area -->
                       
                     </ul>  

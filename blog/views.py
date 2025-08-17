@@ -22,10 +22,7 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["page_title"] = "Home"
-        context["breadcrumbs"] = [
-            {"name": "Home", "url": None},  # Fixed: No URL for current page
-        ]
+     
         context["popular_posts"] = Post.published.order_by("-views_count")[:5]
         return context
 
@@ -44,16 +41,8 @@ def posts_by_category(request, slug):
     )
 
 
-# def detail(request):
-#     context = {
-#         "page_title": "Blog Detail",
-#         "breadcrumbs": [
-#             {"name": "Home", "url": "/"},  # The current page is 'Home'
-#             {"name": "Blog", "url": "/blog"},  # Link to the blog index
-#            # {"name": slug, "url": f"/blog/{slug}"},  # Current blog post
-#         ],
-#     }
-#     return render(request, "blog/detail.html", context)
+# Post detail view
+# This view will display the details of a single post, including comments and a form to add
 
 @login_required
 def post_detail(request, year, month, day, post):

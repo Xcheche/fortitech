@@ -11,6 +11,7 @@ urlpatterns = [
         views.DashboardPasswordChangeView.as_view(),
         name="change_password",
     ),
+    path("about/", views.about, name="about"),
     # Auth
     path("register/", views.register, name="register"),
     path("verify_account/", views.verify_account, name="verify_account"),

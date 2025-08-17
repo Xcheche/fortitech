@@ -21,38 +21,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
 
-
-# def landing(request):
-#     if request.user.is_authenticated:
-#         return redirect('dashboard')
-#     else:
-#         return render(request, 'blog/index.html')
-
-# ====Dashboard
-# def dashboard(request):
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         dashboard_form = DashboardUpdateForm(request.POST, request.FILES, instance=request.user.dashboard)
-#         if user_form.is_valid() and dashboard_form.is_valid():
-#             user_form.save()
-#             dashboard_form.save()
-#             messages.success(request, 'Your dashboard has been updated!')
-#             return redirect('dashboard')
-#     else:
-#         user_form = UserUpdateForm(instance=request.user)
-#         dashboard_form = DashboardUpdateForm(instance=request.user.dashboard)
-#     context = {
-#         "page_title": "Dashboard",
-#         "breadcrumbs": [
-#             {"name": "Home", "url": "/"},
-#             {"name": "Dashboard", "url": "dashboard"},
-#         ],
-#         'user_form': user_form,
-#         'dashboard_form': dashboard_form,
-#     }
+# ===== About view
+# This view renders the about page. It can be used to provide information about the application or
+def about(request: HttpRequest):
+   context = {}
+   return render(request, "accounts/about.html", context=context)
 
 
-#     return render(request, 'accounts/dashboard.html', context)
+
+# ===== Dashboard view# This view handles the user's dashboard. It allows the user to update their profile and dashboard information.   
 # @login_required
 def dashboard(request):
     dashboard_obj = request.user.dashboard  # from related_name
@@ -81,11 +58,7 @@ def dashboard(request):
         request,
         "accounts/dashboard.html",
         {
-            "page_title": "Dashboard",
-            "breadcrumbs": [
-                {"name": "Home", "url": "/"},
-                {"name": "Dashboard", "url": "dashboard"},
-            ],
+           
             "user_form": user_form,
             "dashboard_form": dashboard_form,
         },
@@ -125,11 +98,11 @@ class DashboardPasswordChangeView(PasswordChangeView):
 @redirect_autheticated_user
 def register(request: HttpRequest):
     context = {
-        "page_title": "Register",
-        "breadcrumbs": [
-            {"name": "Home", "url": "/"},
-            {"name": "Register", "url": "Register"},
-        ],
+        # "page_title": "Register",
+        # "breadcrumbs": [
+        #     {"name": "Home", "url": "/"},
+        #     {"name": "Register", "url": "Register"},
+        # ],
     }
 
     if request.method == "POST":
@@ -202,13 +175,7 @@ def verify_account(request: HttpRequest):
 
 @redirect_autheticated_user
 def login(request: HttpRequest):
-    context = {
-        "page_title": "Register",
-        "breadcrumbs": [
-            {"name": "Home", "url": "/"},
-            {"name": "Login", "url": "Login"},
-        ],
-    }
+   
 
     if request.method == "POST":
         email: str = request.POST["email"]
@@ -223,7 +190,7 @@ def login(request: HttpRequest):
             return redirect("login")
 
     else:
-        return render(request, "accounts/login.html", context=context)
+        return render(request, "accounts/login.html")
 
 
 # ======= Logout view

@@ -104,6 +104,16 @@ body a:focus, body a:hover, body .btn:focus, body .btn:hover, body button:focus,
   transition: all 300ms linear 0s;
 }
 
+/*---------------Custom Button-------------------------------------*/
+.custom-btn {
+  background-color: #a05d79;
+  border-color: #a05d79;
+}
+.custom-btn:hover {
+  background-color: #ce8247;
+  border-color: #ce8247;
+}
+
 /* Main title css */
 .tranding_tittle {
   margin-bottom: 30px;

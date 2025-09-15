@@ -21,15 +21,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
 
+
 # ===== About view
 # This view renders the about page. It can be used to provide information about the application or
 def about(request: HttpRequest):
-   context = {}
-   return render(request, "accounts/about.html", context=context)
+    context = {}
+    return render(request, "accounts/about.html", context=context)
 
 
-
-# ===== Dashboard view# This view handles the user's dashboard. It allows the user to update their profile and dashboard information.   
+# ===== Dashboard view# This view handles the user's dashboard. It allows the user to update their profile and dashboard information.
 # @login_required
 def dashboard(request):
     dashboard_obj = request.user.dashboard  # from related_name
@@ -58,7 +58,6 @@ def dashboard(request):
         request,
         "accounts/dashboard.html",
         {
-           
             "user_form": user_form,
             "dashboard_form": dashboard_form,
         },
@@ -175,7 +174,6 @@ def verify_account(request: HttpRequest):
 
 @redirect_autheticated_user
 def login(request: HttpRequest):
-   
 
     if request.method == "POST":
         email: str = request.POST["email"]

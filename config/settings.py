@@ -84,6 +84,7 @@ THIRD_PARTY_APPS = [
     "cloudinary_storage",
     "whitenoise",
     "ckeditor",
+   # "django_password_eye",  for password visibility toggle
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -126,32 +127,37 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
+if DEBUG:
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DATABASE_NAME"),
-        "USER": os.getenv("DATABASE_USER"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
-        "HOST": os.getenv("DATABASE_HOST"),
-        "PORT": os.getenv("DATABASE_PORT"),
-        "OPTIONS": {
-            "sslmode": os.getenv(
-                "DATABASE_SSLMODE", "require"
-            ),  # Default to 'require' if not set
-        },
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DATABASE_NAME"),
+            "USER": os.getenv("DATABASE_USER"),
+            "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+            "HOST": os.getenv("DATABASE_HOST"),
+            "PORT": os.getenv("DATABASE_PORT"),
+            "OPTIONS": {
+                "sslmode": os.getenv(
+                    "DATABASE_SSLMODE", "require"
+                ),  # Default to 'require' if not set
+            },
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -240,8 +246,8 @@ AUTH_USER_MODEL = "accounts.User"
 
 
 # Email config
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #for smtp
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # for smtp
 
 # Mailpit
 EMAIL_HOST = "localhost"  # Mailpit host

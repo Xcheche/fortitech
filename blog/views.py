@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,7 +22,7 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-     
+
         context["popular_posts"] = Post.published.order_by("-views_count")[:5]
         return context
 
@@ -43,6 +43,7 @@ def posts_by_category(request, slug):
 
 # Post detail view
 # This view will display the details of a single post, including comments and a form to add
+
 
 @login_required
 def post_detail(request, year, month, day, post):
@@ -73,7 +74,9 @@ def post_detail(request, year, month, day, post):
             comment.post = post
             comment.author = request.user
             parent_id = request.POST.get("parent_id")
-            comment.parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
+            comment.parent = (
+                Comment.objects.filter(id=parent_id).first() if parent_id else None
+            )
             comment.save()
             return redirect(post.get_absolute_url())
     else:
@@ -88,3 +91,9 @@ def post_detail(request, year, month, day, post):
         "reply_to": reply_to,
     }
     return render(request, "blog/post_detail.html", context)
+
+
+
+
+#Search
+#TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax

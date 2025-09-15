@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load  static %}
+{% load static %}
 {% block content %}
 
 <div class="container">
@@ -22,10 +22,12 @@
             <form class="row login_from" method="post" action="{% url 'login' %}">  
                 {% csrf_token %}
                 <div class="form-group col-12">
-                    <input type="email" class="form-control" name="email" placeholder="Email Address">
+                    <input type="email" class="form-control" name="email" value="{{ request.POST.email|default_if_none:'' }}"  placeholder="Email Address">
                 </div> 
-                <div class="form-group col-12">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                <div class="form-group col-12" style="position:relative;">
+                    <!-- Show Password -->
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" style="padding-right:40px;">
+                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer; margin: 5px;"></span>
                 </div>
                 <div class="form-group col-12">
                     <input type="text" class="form-control" name="code" placeholder="Your Code ( 2fa if inavailed )">
@@ -41,7 +43,8 @@
                 </div> 
                 <h4 class="col-12">or login in with</h4> 
                 <div class="form-group col-sm-6">
-                    <a href="#" class="google_btn"><img src="images/google.png" alt="">GOOGLE</a>
+                    <!--TODO: Implement Google login-->
+                    <a href="#" class="google_btn"><img src="{% static 'images/google.png' %}" alt="">GOOGLE</a>
                 </div>
                 <div class="form-group col-sm-6">  
                     <a href="" class="google_btn"><i class="fa fa-facebook"></i>Sign Up</a> 
@@ -56,5 +59,27 @@
         </div> 
     </div>
 </section>
+
+
+
+
+<!---Password toggle-->
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const input = document.querySelector(this.getAttribute('toggle'));
+            if (input.getAttribute('type') === 'password') {
+                input.setAttribute('type', 'text');
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                input.setAttribute('type', 'password');
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    });
+</script>
+
 
 {% endblock %}

@@ -137,8 +137,8 @@ class Dashboard(models.Model):
     #             img.save(self.profile_picture.path)
     # Resizing profile_picture automatically
     def save(self, *args, **kwargs):
-    # Call the parent save method with all arguments
-     super().save(*args, **kwargs)
+        # Call the parent save method with all arguments
+        super().save(*args, **kwargs)
 
     # Commented out because CloudinaryField doesn't have .path
     # if self.profile_picture:
@@ -147,3 +147,8 @@ class Dashboard(models.Model):
     #         output_size = (300, 300)
     #         img.thumbnail(output_size)
     #         img.save(self.profile_picture.path)
+
+
+
+#About us model
+#TODO: Add  about and rich text field for description

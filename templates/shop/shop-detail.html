@@ -128,7 +128,51 @@
                                     <p>Google has updated its AdSense ad policies, no longer permitting the use of such ads on pop-under pages. This decision was made because the company believes ads on pop-under pages do not provide a good user experience. “Pop-under ads can be annoying as well, as they will “pop under” your window, so that you don’t see them until you minimize your browser. We do not believe these ads provide a good user experience, and therefore are not suitable for Google ads.”</p> 
                                 </div>
                                 <div id="menu2" class="tab-pane fade">
-                                    
+                                    <!-- Reviews Carousel -->
+                                    <div id="reviewsCarousel" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <!-- Review 1 -->
+                                            <div class="carousel-item active">
+                                                <div class="card p-3">
+                                                    <p class="mb-2">An ideal pick for casual summer styling is this black T-shirt from Jack & Jones.</p>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="badge bg-success">Approved</span>
+                                                        <button class="btn btn-outline-primary btn-sm">Reply</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Review 2 -->
+                                            <div class="carousel-item">
+                                                <div class="card p-3">
+                                                    <p class="mb-2">Google has updated its AdSense ad policies, no longer permitting ads on pop-under
+                                                        pages.</p>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="badge bg-success">Approved</span>
+                                                        <button class="btn btn-outline-primary btn-sm">Reply</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Carousel controls -->
+                                        <a class="carousel-control-prev" href="#reviewsCarousel" role="button" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#reviewsCarousel" role="button" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
+                                    </div>
+                                
+                                    <!-- Add Review Form -->
+                                    <form class="mt-4">
+                                        <div class="mb-3">
+                                            <label for="reviewText" class="form-label">Add a Review</label>
+                                            <textarea class="form-control" id="reviewText" rows="3" placeholder="Write your review here..."
+                                                required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                    </form>
                                 </div>
                             </div>
                         </div> <!-- /.review-tab --> 

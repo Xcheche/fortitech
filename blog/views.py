@@ -93,7 +93,14 @@ def post_detail(request, year, month, day, post):
     return render(request, "blog/post_detail.html", context)
 
 
+#Create Post
+#TODO: Implement create post functionality using Django's generic CreateView for blog app, make single page with ajax
 
+#Edit Post
+#TODO: Implement edit post functionality using Django's generic UpdateView for blog app, make single page with ajax
+
+#Delete Post
+#TODO: Implement delete post functionality using Django's generic DeleteView for blog app, make single page with ajax
 
 #Search
 #TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax

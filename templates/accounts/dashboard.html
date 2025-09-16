@@ -2191,6 +2191,17 @@ p {
                             <i class="ni ni-single-02"></i>
                             <span>Deactivate</span>
                           </a>
+                          {% if user.is_staff %}
+                          <a href="#" class="dropdown-item">
+                            <i class="ni ni-single-02"></i>
+                            <span>Post</span>
+                          </a>
+                          {% else %}
+                          <a href="#" class="dropdown-item"></a>
+                            <i class="ni ni-single-02"></i>
+                            <span>View</span>
+                          </a>
+                          {% endif %}
                         <div class="dropdown-divider"></div>
                         <a href="{% url 'logout' %}" class="dropdown-item">
                           <i class="ni ni-user-run"></i>

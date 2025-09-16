@@ -246,8 +246,8 @@ AUTH_USER_MODEL = "accounts.User"
 
 
 # Email config
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # for smtp
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # for console
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # for smtp
 
 # Mailpit
 EMAIL_HOST = "localhost"  # Mailpit host

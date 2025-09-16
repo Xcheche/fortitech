@@ -11,8 +11,9 @@ def shop(request):
 
 #Shop detail view
 #TODO: Implement shop detail view
-class ShopDetailView:
-    pass
+def shop_detail(request):
+    return render(request, 'shop/shop-detail.html')
+   
 
 
 

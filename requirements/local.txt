@@ -1,0 +1,6 @@
+-r base.txt
+
+
+pytest==8.4.1
+pytest-django==4.11.1
+coverage==7.10.3

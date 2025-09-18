@@ -1,0 +1,9 @@
+-r base.txt
+
+
+whitenoise==6.9.0
+psycopg2==2.9.10
+psycopg2-binary==2.9.10
+cloudinary==1.42.2
+django-cloudinary-storage==0.3.0
+dj-database-url==3.0.1

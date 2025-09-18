@@ -117,6 +117,32 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2025-09-16T04:11:00.479Z",
+    "user": "19779ee2-ec85-41e5-b4d6-af870353036a",
+    "content_type": 9,
+    "object_id": "69c251e4-352f-4164-a1e3-d305bf7ef9e7",
+    "object_repr": "max@mail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-09-16T04:11:12.190Z",
+    "user": "19779ee2-ec85-41e5-b4d6-af870353036a",
+    "content_type": 8,
+    "object_id": "36efbc59-77cf-4dd1-a159-9d3e55bde317",
+    "object_repr": "max@mail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -830,6 +856,30 @@
 },
 {
   "model": "sessions.session",
+  "pk": "8e2eszkcj1k63lfw4ducdbbh8guxkcg9",
+  "fields": {
+    "session_data": "e30:1uyGfG:2e6MmlQi9SYRNPkeNO-hRbrgMj3GSTDMk8BHgwRJ-aM",
+    "expire_date": "2025-09-29T21:23:10.768Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "cj9y9y7igfoijkf1pfofr90m5a4nxze0",
+  "fields": {
+    "session_data": "e30:1uyGZq:yw6bhHr7pxtaVDLy_QEZRDu9wPpyRpY6hSJoGiLI-vo",
+    "expire_date": "2025-09-29T21:17:34.676Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "i13q85qxebnvb34tlb2w4qcks6l84f1z",
+  "fields": {
+    "session_data": "e30:1uyEZ5:DD0VrfG_8ljZSPbYhqbJ2fZbyMZ-34hnRd2HOojpMOs",
+    "expire_date": "2025-09-29T19:08:39.097Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "v0m67rlzgjrhqtc323u4u5u87zk7sgrr",
   "fields": {
     "session_data": "e30:1uvWef:yLkTDhRtUVcxN-B5kb6tqOk2v6i5SaJSMSiGuWMIPJc",
@@ -837,13 +887,21 @@
   }
 },
 {
+  "model": "sessions.session",
+  "pk": "y3suy1zr3nwb5mqv101wbwf5gfo1acz7",
+  "fields": {
+    "session_data": ".eJxVzDsOwjAQRdG9uMaWv2Obkp41RDP2mARQIuVTIfYOkVJA_e55L9HhtvbdtvDcDVWchckxZmYruaQgveEgyVeQ2FLULjjtAMXplxGWB4-7rXccb5Mq07jOA6k9Uce6qOtU-Xk52r-DHpf-q9k4SrWFSsln7SIU4EyhVUMWAcAmbckgkYfkdDSoi86Yc3EAMTQr3h-_HEBg:1uyN2g:sYaWHCw9YLdcnu7lJLle-gi0-HbZ3uN-kp0Zdzxo9OA",
+    "expire_date": "2025-09-30T04:11:46.709Z"
+  }
+},
+{
   "model": "accounts.user",
   "pk": "19779ee2-ec85-41e5-b4d6-af870353036a",
   "fields": {
-    "last_login": "2025-08-27T14:57:44.966Z",
+    "last_login": "2025-09-16T04:10:45.839Z",
     "is_superuser": true,
     "created_at": "2025-08-27T14:55:10.334Z",
-    "updated_at": "2025-08-27T15:13:05.485Z",
+    "updated_at": "2025-09-16T04:11:43.695Z",
     "email": "cheche@gmail.com",
     "password": "pbkdf2_sha256$1000000$H8sCqkxGLIKXYmKbMCveEm$uL9cI2IZErfOlAc6SEnbTiWVEa9dfg1Jupbsr2dQNAI=",
     "is_active": true,
@@ -865,7 +923,7 @@
     "bio": "The developer",
     "city": "Lagos",
     "post_code": "900271",
-    "profile_picture": null
+    "profile_picture": "image/upload/v1757995905/cyberguard_blog_profile_images/bfbmbflmcxpx7splln5d.jpg"
   }
 },
 {
@@ -923,7 +981,7 @@
     "author": "19779ee2-ec85-41e5-b4d6-af870353036a",
     "body": "<p>The term &quot;IP&quot; commonly refers to Internet Protocol, a fundamental technology that governs how data is transmitted over the internet. IP is responsible for addressing and routing packets of information so they can travel across networks and reach their intended destinations. Every device connected to the internet is assigned a unique IP address, which functions similarly to a mailing address, allowing devices to identify and communicate with each other.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>There are two primary versions of IP in use today: IPv4 and IPv6. IPv4, the most widely used version, consists of a 32-bit address space, which allows for approximately 4.3 billion unique addresses. However, as the number of internet-connected devices has surged, the limitations of IPv4 have become apparent, prompting the adoption of IPv6. With its 128-bit address space, IPv6 can accommodate an almost infinite number of devices, ensuring that the internet can continue to grow.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>In addition to addressing, IP works in tandem with other protocols like TCP (Transmission Control Protocol) to ensure reliable data transmission. Understanding IP is crucial for anyone working in networking, cybersecurity, or web development, as it underpins the very structure of online communication.</p>",
     "status": "PB",
-    "views_count": 0
+    "views_count": 8
   }
 },
 {
@@ -940,7 +998,31 @@
     "author": "19779ee2-ec85-41e5-b4d6-af870353036a",
     "body": "<p>ASP.NET is a robust framework developed by Microsoft, primarily used for building dynamic web applications and services. Since its inception, it has evolved significantly, providing developers with a powerful platform for creating scalable and high-performance web solutions.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>One of the key features of ASP.NET is its ability to support multiple programming languages, including C# and VB.NET, allowing developers to choose the language they are most comfortable with. The framework simplifies the development process through its rich set of libraries and tools, facilitating faster application development.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>ASP.NET provides various models for web application development, such as ASP.NET Web Forms, which allows for a drag-and-drop interface, and ASP.NET MVC, which promotes a more structured approach with the separation of concerns. Additionally, with the introduction of ASP.NET Core, developers can create cross-platform applications, thus expanding their reach beyond Windows to include Linux and macOS.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Security is another crucial aspect of ASP.NET, as it incorporates built-in features for authentication and authorization, helping developers safeguard their applications against common security threats. Overall, ASP.NET is a powerful choice for building modern web applications, providing the necessary tools and flexibility to meet diverse development needs.</p>",
     "status": "PB",
-    "views_count": 0
+    "views_count": 1
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": "149b90d7-2558-447c-b888-9c01980ea94d",
+  "fields": {
+    "created_at": "2025-09-15T21:33:43.847Z",
+    "updated_at": "2025-09-15T21:33:43.847Z",
+    "post": "611e93c2-1e69-476d-ad48-ee4bf2ce638e",
+    "author": "19779ee2-ec85-41e5-b4d6-af870353036a",
+    "body": "@cheche How are you boss?",
+    "parent": "9cf2e571-85d7-4910-a3d7-77e9ce4a048c"
+  }
+},
+{
+  "model": "blog.comment",
+  "pk": "9cf2e571-85d7-4910-a3d7-77e9ce4a048c",
+  "fields": {
+    "created_at": "2025-09-15T21:33:19.333Z",
+    "updated_at": "2025-09-15T21:33:19.333Z",
+    "post": "611e93c2-1e69-476d-ad48-ee4bf2ce638e",
+    "author": "19779ee2-ec85-41e5-b4d6-af870353036a",
+    "body": "NIce",
+    "parent": null
   }
 }
 ]

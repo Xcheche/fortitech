@@ -8,13 +8,15 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
-
+from decouple import config
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+debug = config('DEBUG', default=False, cast=bool)
+if debug:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+
+
 
 application = get_wsgi_application()
-
-
-# for vercel only
-app = application

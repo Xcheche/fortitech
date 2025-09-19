@@ -1,4 +1,4 @@
-
+![License: MIT](https://img.shields.io/github/license/xcheche/fortitech)
 ```markdown
 # Django Blog & Shop Web App
 

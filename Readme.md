@@ -30,12 +30,12 @@ This platform combines content and commerce for a secure, manageable experience 
 
 ### Prerequisites
 
-| Name       | Version                          |
+| Name       | Version/Requirement              |
 |------------|----------------------------------|
-| Python     | 3.8+                             |
+| Python     | 3.8 or higher                    |
 | pip        | Latest                           |
-| PostgreSQL | Preferred (update settings)       |
-| Stripe     | Account for API keys              |
+| PostgreSQL | Recommended (update settings)    |
+| Stripe     | Account (for API keys)           |
 
 ### Installation
 

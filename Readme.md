@@ -1,9 +1,7 @@
-![License: MIT](https://img.shields.io/github/license/xcheche/fortitech
-)
-```markdown
-# Django Blog & Shop Web App
+![License: MIT](https://img.shields.io/github/license/xcheche/fortitech)
 
-![License: MIT](https://img.shields.io/github/license/xcheche/great-kart)
+
+# Django Blog & Shop Web App
 
 A combined blog and ecommerce platform built with Django, featuring:
 
@@ -42,8 +40,8 @@ This platform combines content and commerce for a secure, manageable experience 
 
 1. **Clone the repository:**
     ```sh
-    git clone <repository-url>
-    cd <project-folder>
+    git clone https://github.com/xcheche/fortitech.git
+    cd fortitech
     ```
 2. **Create and activate a virtual environment:**
     ```sh
@@ -105,5 +103,3 @@ Licensed under the MIT License. See [MIT License](LICENSE) for details.
 ---
 
 Questions or contributions? Open an issue or submit a pull request.
-```
-

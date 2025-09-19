@@ -18,7 +18,7 @@ A combined blog and ecommerce platform built with Django, featuring:
 
 ## Blog Features
 
-- Only admins can create, edit, and publish blog posts via Django admin
+- Only admins can create, edit, and publish blog posts via Django admin and in the frontend
 - Blog management integrated with ecommerce
 - Visitors can read articles that complement products
 

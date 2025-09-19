@@ -20,3 +20,6 @@ else:
 
 
 application = get_wsgi_application()
+
+#For vercel
+app = application

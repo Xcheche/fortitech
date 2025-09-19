@@ -23,3 +23,9 @@ if __name__ == "__main__":
     main()
 
 
+
+
+#To see settings module being used
+# echo $DJANGO_SETTINGS_MODULE 
+#To unset the variable
+# unset DJANGO_SETTINGS_MODULE

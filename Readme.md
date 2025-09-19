@@ -1,4 +1,5 @@
-![License: MIT](https://img.shields.io/github/license/xcheche/fortitech)
+![License: MIT](https://img.shields.io/github/license/Xcheche/fortitech)
+
 
 
 # Django Blog & Shop Web App

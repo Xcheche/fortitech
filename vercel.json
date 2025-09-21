@@ -5,19 +5,12 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.11.3"
+        "runtime": "python3.11.3",
+        "buildCommand": "pip install -r requirements/production.txt && python manage.py migrate && python manage.py collectstatic --noinput"
       }
-    },
-    {
-      "src": "build.sh",
-      "use": "@vercel/static-build"
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "config/wsgi.py"

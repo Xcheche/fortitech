@@ -9,21 +9,16 @@ from .email_config import *  # noqa: F403
 from .celery import *  # noqa: F403
 
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1')
-
-
-
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="localhost,127.0.0.1")
 
 
 # Application definition
-
 
 
 DJANGO_APPS = [
@@ -36,8 +31,8 @@ DJANGO_APPS = [
     "widget_tweaks",
     "crispy_forms",
     "crispy_bootstrap5",
-    'cloudinary',
-    'cloudinary_storage',
+    "cloudinary",
+    "cloudinary_storage",
 ]
 PROJECT_APPS = [
     # Projects
@@ -48,10 +43,9 @@ PROJECT_APPS = [
 ]
 THIRD_PARTY_APPS = [
     # External apps/packages
-  
     "whitenoise",
     "ckeditor",
-   # "django_password_eye",  for password visibility toggle
+    # "django_password_eye",  for password visibility toggle
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -73,7 +67,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -92,8 +86,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
-
-
 
 
 # Database
@@ -185,6 +177,3 @@ MESSAGE_TAGS = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Ensure the custom user model exists in accounts/models.py as class User(AbstractUser)
 AUTH_USER_MODEL = "accounts.User"
-
-
-

@@ -149,6 +149,5 @@ class Dashboard(models.Model):
     #         img.save(self.profile_picture.path)
 
 
-
-#About us model
-#TODO: Add  about and rich text field for description
+# About us model
+# TODO: Add  about and rich text field for description

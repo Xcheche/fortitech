@@ -13,17 +13,10 @@ class Contact(BaseModel):
         max_length=100,
         choices=[
             ("inquiry", "Inquiry"),
-            ("feedback", "Feedback"),
-            ("support", "Support"),
+            ("register_course", "Register Course"),
             ("other", "Other"),
-            ("complaint", "Complaint"),
-            ("suggestion", "Suggestion"),
-            ("request", "Request"),
-            ("general", "General"),
-            ("urgent", "Urgent"),
-            ("follow-up", "Follow-up"),
         ],
-        default="general",
+        default="inquiry",
     )
 
     class Meta:

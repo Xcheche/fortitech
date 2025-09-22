@@ -15,7 +15,7 @@ class HomeView(ListView):
     model = Post
     template_name = "blog/index.html"
     context_object_name = "posts"
-    paginate_by = 2
+    paginate_by = 4
 
     def get_queryset(self):
         return Post.published.all().order_by("-created_at")
@@ -93,14 +93,14 @@ def post_detail(request, year, month, day, post):
     return render(request, "blog/post_detail.html", context)
 
 
-#Create Post
-#TODO: Implement create post functionality using Django's generic CreateView for blog app, make single page with ajax
+# Create Post
+# TODO: Implement create post functionality using Django's generic CreateView for blog app, make single page with ajax
 
-#Edit Post
-#TODO: Implement edit post functionality using Django's generic UpdateView for blog app, make single page with ajax
+# Edit Post
+# TODO: Implement edit post functionality using Django's generic UpdateView for blog app, make single page with ajax
 
-#Delete Post
-#TODO: Implement delete post functionality using Django's generic DeleteView for blog app, make single page with ajax
+# Delete Post
+# TODO: Implement delete post functionality using Django's generic DeleteView for blog app, make single page with ajax
 
-#Search
-#TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax
+# Search
+# TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax

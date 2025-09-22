@@ -37,7 +37,7 @@
                     {{ form.purpose|add_class:"form-control post_select" }}
                 </div>
                 <div class="form-group col-12">
-                    {{ form.message|add_class:"form-control"|attr:"placeholder:Your Message" }}
+                    {{ form.message|add_class:"form-control"|attr:"placeholder:Any message? " }}
                 </div>
                 <div class="form-group col-12">
                     <!--Field error-->
@@ -74,5 +74,17 @@
         </div>
     </section>
     <!-- End Contact Us Area -->  
+    <!-- JavaScript to handle the alert and redirection -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const purposeField = document.querySelector('select[name="purpose"]');
+            purposeField.addEventListener('change', function () {
+                if (this.value === 'register_course') {
+                    alert('After submitting, you will be redirected to the registration page.');
+                }
+            });
+        });
+    </script> 
+      
    
 {% endblock %}    

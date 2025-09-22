@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 from datetime import datetime, timedelta
@@ -16,7 +15,7 @@ backup_path = os.path.join(BACKUP_DIR, backup_filename)
 
 # Determine which environment you are backing up:
 # For local backup set 'local', for production set 'prod'
-env = os.getenv('ENV', 'local')  # Default to local if ENV var not set
+env = os.getenv("ENV", "local")  # Default to local if ENV var not set
 
 settings_module = "config.settings.prod" if env == "prod" else "config.settings.local"
 
@@ -40,7 +39,6 @@ except subprocess.CalledProcessError as e:
     sys.exit(1)
 
 
-
-#To test for 3 minutes crontab -e switch django to True to pick local settings
-#*/3 * * * * export ENV=local && cd /home/cheche/Documents/django_projects/fortitech/ && /home/cheche/Documents/django_projects/fortitech/.venv/bin/python backup_db.py >> backup.log 2>&1
-#To set  for prod set django to True to pick prod settings
+# To test for 3 minutes crontab -e switch django to True to pick local settings
+# */3 * * * * export ENV=local && cd /home/cheche/Documents/django_projects/fortitech/ && /home/cheche/Documents/django_projects/fortitech/.venv/bin/python backup_db.py >> backup.log 2>&1
+# To set  for prod set django to True to pick prod settings

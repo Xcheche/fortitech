@@ -1,4 +1,3 @@
-
 from .base import *  # noqa: F403
 from decouple import config
 import cloudinary.uploader

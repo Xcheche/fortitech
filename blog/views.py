@@ -101,7 +101,7 @@ def post_detail(request, year, month, day, post):
 
 
 # Create Post
-# TODO: Implement create post functionality using Django's generic CreateView for blog app, make single page with ajax
+
 #================================= Create Post================================================
 def  create_post(request):
     """View to create a new blog post."""
@@ -128,6 +128,8 @@ def  create_post(request):
 
 # Delete Post
 # TODO: Implement delete post functionality using Django's generic DeleteView for blog app, make single page with ajax
+#TODO: Feature to prevent users from editing/deleting posts that aren't theirs
+#TODO: Feature to view all post by a specific user   
 
 # Search
 # TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax

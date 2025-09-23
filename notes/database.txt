@@ -1,0 +1,67 @@
+# Django Project Database and Management Commands
+
+## 1. Open Django Shell with Local Settings
+python manage.py shell --settings=config.settings.local
+
+## 2. Dump Data from Local Database to JSON
+python manage.py dumpdata --settings=config.settings.local > dev_data.json
+
+## 3. Database Environment Notes
+# - Set DEBUG = False for production mode before dumping data.
+# - If using SQLite, switch to PostgreSQL in config/settings/local.py before migrating/dumping.
+#   (Dumping from SQLite to PostgreSQL is not recommended.)
+
+## 4. PostgreSQL Setup (Ubuntu/Debian)
+sudo apt install postgresql postgresql-contrib
+sudo service postgresql start
+
+# Create database and user
+sudo -u postgres psql
+CREATE DATABASE fortitech_local;
+CREATE USER cheche WITH PASSWORD 'yourpassword';
+GRANT ALL PRIVILEGES ON DATABASE fortitech_local TO cheche;
+\q
+
+## 5. Migrate Database
+python manage.py migrate --settings=config.settings.local
+python manage.py migrate --settings=config.settings.production
+
+## 6. Dump Data with Indentation
+python manage.py dumpdata --indent 2 --settings=config.settings.local > data.json
+
+# Dump specific app data
+python manage.py dumpdata blog --indent 2 --settings=config.settings.local > blog_data.json
+
+## 7. Load Data from JSON
+python manage.py loaddata blog_data.json --settings=config.settings.local
+python manage.py loaddata data.json --settings=config.settings.production
+
+## 8. Create Superuser
+python manage.py createsuperuser --settings=config.settings.local
+python manage.py createsuperuser --settings=config.settings.production
+
+## 9. Start Django Development Server
+python manage.py runserver --settings=config.settings.local
+python manage.py runserver --settings=config.settings.production
+
+## 10. Check for Issues
+python manage.py check --settings=config.settings.local
+python manage.py check --settings=config.settings.production
+
+## 11. Collect Static Files for Deployment
+python manage.py collectstatic --settings=config.settings.production
+
+## 12. Clear Django Cache
+python manage.py clear_cache --settings=config.settings.local
+python manage.py clear_cache --settings=config.settings.production
+
+## 13. Run Tests
+python manage.py test --settings=config.settings.local
+python manage.py test --settings=config.settings.production
+
+## 14. View SQL for Migrations
+python manage.py sqlmigrate your_app_name migration_number --settings=config.settings.local
+python manage.py sqlmigrate your_app_name migration_number --settings=config.settings.production
+
+## 15. Create a New Django App
+python manage.py startapp your_app_name --settings=config.settings.local

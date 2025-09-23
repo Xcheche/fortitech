@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from .models import Comment
+from .models import Comment,Post
 
 BAD_WORDS = [
     "badword1",
@@ -19,7 +19,7 @@ BAD_WORDS = [
     "pig",
 ]  # extend this list
 
-
+#==================Comment form=====================
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -37,3 +37,15 @@ class CommentForm(forms.ModelForm):
                     "Your comment contains inappropriate language."
                 )
         return body
+
+
+#=================================Post form=================
+
+
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = '__all__'
+        exclude = ['slug', 'author','publish','views_count']  # Don't show slug and author in the user-facing form

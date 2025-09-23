@@ -4,14 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from blog.forms import CommentForm
+
 from blog.models import Category, Comment, Post
 from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.db.models import F
+from django.contrib import messages
+from .forms import PostForm  
 
 
 # Create your views here.
+#====================================Home============================
 class HomeView(ListView):
+    """View to display the home page with a list of blog posts."""
     model = Post
     template_name = "blog/index.html"
     context_object_name = "posts"
@@ -27,9 +32,10 @@ class HomeView(ListView):
         return context
 
 
-# Category view
+#====================================== Category view=====================================
 # This view will filter posts by the selected category
 def posts_by_category(request, slug):
+    """View to display posts filtered by category."""
     category = get_object_or_404(Category, slug=slug)
     posts = Post.published.filter(category=category)
 
@@ -41,12 +47,13 @@ def posts_by_category(request, slug):
     )
 
 
-# Post detail view
+
+
+#================================== Post detail view========================================
 # This view will display the details of a single post, including comments and a form to add
-
-
 @login_required
 def post_detail(request, year, month, day, post):
+
     post = get_object_or_404(
         Post,
         status=Post.Status.PUBLISHED,
@@ -95,7 +102,27 @@ def post_detail(request, year, month, day, post):
 
 # Create Post
 # TODO: Implement create post functionality using Django's generic CreateView for blog app, make single page with ajax
+#================================= Create Post================================================
+def  create_post(request):
+    """View to create a new blog post."""
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)  # Don't save to DB yet
+            post.author = request.user      # Assign the current logged-in user
+            post.save()                     # Now save to DB
+            messages.success(request, 'Post created successfully!')
+            return redirect('home')  # Redirect to home or post detail page
+        
+    else:
+        form = PostForm()
+    context = {'form': form}
+    return render(request, 'blog/post.html', context)
 
+
+    return redirect(request, 'blog/post.html')
+  
 # Edit Post
 # TODO: Implement edit post functionality using Django's generic UpdateView for blog app, make single page with ajax
 

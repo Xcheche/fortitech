@@ -1,0 +1,38 @@
+<!-- Page content -->
+ {% load static %}
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+      <div class="card card-profile shadow">
+        <div class="row justify-content-center">
+          <div class="col-lg-3 order-lg-2">
+            <div class="card-profile-image">
+              <a href="#">
+                {% if dashboard_form.instance.profile_picture %}
+                <img src="{{ dashboard_form.instance.profile_picture.url}}" class="rounded-circle">
+                {% else %}
+                <img src="{% static 'images/default.png' %}" class="rounded-circle">
+                {% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+          
+        </div>
+        <div class="card-body pt-0 pt-md-4">
+          <div class="row">
+            <div class="col">
+              <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+              
+                <div>
+                  <span class="heading">10</span>
+                  <span class="description">Purchased</span>
+                </div>
+                <div>
+                  <span class="heading">89</span>
+                  <span class="description">Blog</span>
+                </div>
+              </div>
+            </div>
+          </div>

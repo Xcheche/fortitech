@@ -11,10 +11,15 @@ from .models import Dashboard
 
 # Get the custom user model (if you have one)
 User = get_user_model()
+#-----logging setup-----
+import logging
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=User)
+
 def create_user_dashboard(sender, instance, created, **kwargs):
+    
     """
     Creates a Dashboard object and sends a welcome email when a new user is created.
     Ensures the dashboard always has a default profile picture if none is set.
@@ -27,7 +32,13 @@ def create_user_dashboard(sender, instance, created, **kwargs):
         default_image_path = os.path.join(
             settings.BASE_DIR, "static", "images", "default.png"
         )
-        if hasattr(dashboard, "profile_picture") and not dashboard.profile_picture:
+
+        #======= Only set the default profile picture if it's not already set=================
+        if not dashboard.profile_picture:
             if os.path.exists(default_image_path):
-                with open(default_image_path, "rb") as f:
-                    dashboard.profile_picture.save("default.png", File(f), save=True)
+               try:
+                   with open(default_image_path, "rb") as f:
+                       dashboard.profile_picture = File(f, name="default.png")
+                       dashboard.save()  # Save the dashboard with the default image
+               except Exception as e:
+                   logger.error(f"Error setting default profile picture: {e}")

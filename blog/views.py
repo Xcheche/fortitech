@@ -11,6 +11,9 @@ from django.views.generic import ListView
 from django.db.models import F
 from django.contrib import messages
 from .forms import PostForm  
+from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
+from django.views.generic import (UpdateView, DeleteView)
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -123,12 +126,45 @@ def  create_post(request):
 
     return redirect(request, 'blog/post.html')
   
-# Edit Post
-# TODO: Implement edit post functionality using Django's generic UpdateView for blog app, make single page with ajax
 
-# Delete Post
-# TODO: Implement delete post functionality using Django's generic DeleteView for blog app, make single page with ajax
-#TODO: Feature to prevent users from editing/deleting posts that aren't theirs
+
+#========================= Edit Post================================
+class EditPostView(LoginRequiredMixin,UpdateView):
+    """View to edit an existing blog post."""
+    model = Post
+    template_name = "blog/post.html"
+    fields = ['title', 'body', 'category', 'post_image']  # Fields to be edited
+    context_object_name = 'post'
+
+    # Only allow the author to edit the post
+    def form_valid(self, form): # Django cbv view without form dosent require save=false
+        form.instance.author = self.request.user  # Set the author to the current logged in user
+         # Add success message
+        messages.success(self.request, "Your post has been successfully updated!")
+
+        return super().form_valid(form)
+    # Redirect to the post detail page after successful edit   
+    def get_success_url(self):
+        return self.object.get_absolute_url()  # Use the post's absolute URL (the detail page URL)
+    # Ensure only the author can edit the post
+    def test_func(self): # Check if the current user is the author of the post
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+    
+     
+
+
+
+#====================================== Delete Post================================================
+class DeleteView(DeleteView):
+    """View to delete an existing blog post."""
+    model = Post
+    template_name = "blog/post_confirm_delete.html"
+    success_url = reverse_lazy("home")  # Redirect to home page after deletion
+
 #TODO: Feature to view all post by a specific user   
 
 # Search

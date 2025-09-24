@@ -29,6 +29,7 @@
                 {% csrf_token %}
                 {{ form.media }} <!-- Add this line to include JS/CSS for CKEditor -->
                 <div class="col-12">
+                    
                     {% for field in form %}
                         <div class="mb-3">
                             <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
@@ -36,13 +37,24 @@
                             {% if field.help_text %}
                                 <div class="form-text">{{ field.help_text }}</div>
                             {% endif %}
+                            
                             {% for error in field.errors %}
                                 <div class="invalid-feedback d-block">{{ error }}</div>
                             {% endfor %}
                         </div>
                     {% endfor %}
+                    
                 </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    {% if post.post_image %}
+                    <img class="mb-4" src="{{ post.post_image.url }}" alt="Current post Image" width="300"/>
+                    {% endif %}
+                </div>
+
+
                 <div class="col-12">
+
+                    
                     <button type="submit" class="btn btn-primary w-100">Create Post</button>
                 </div>
             </form>

@@ -14,12 +14,31 @@ python manage.py dumpdata --settings=config.settings.local > dev_data.json
 ## 4. PostgreSQL Setup (Ubuntu/Debian)
 sudo apt install postgresql postgresql-contrib
 sudo service postgresql start
-
+--------------------------------------------------------------
 # Create database and user
 sudo -u postgres psql
 CREATE DATABASE fortitech_local;
 CREATE USER cheche WITH PASSWORD 'yourpassword';
 GRANT ALL PRIVILEGES ON DATABASE fortitech_local TO cheche;
+-----------------------------------------------------------
+
+If you want this user to:
+
+Create databases:
+
+ALTER USER cheche CREATEDB;
+------------------------------------------------------------
+Be a superuser (full access, not usually recommended for apps):
+
+ALTER USER cheche WITH SUPERUSER;
+----------------------------------------------------------------
+Access a specific database like blog:
+
+GRANT ALL PRIVILEGES ON DATABASE blog TO cheche;
+----------------------------------------------------------------
+If you want the user cheche to own a database (e.g., for Django):
+
+CREATE DATABASE blog OWNER cheche;
 \q
 
 ## 5. Migrate Database

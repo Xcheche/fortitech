@@ -1,44 +1,53 @@
-# Django Project Database and Management Commands
+# Django Project Database & Management Commands
 
-## 1. Open Django Shell with Local Settings
+## 1. Open Django Shell (Local Settings)
 python manage.py shell --settings=config.settings.local
-
+-------------------------------------------------------------------------
 ## 2. Dump Data from Local Database to JSON
 python manage.py dumpdata --settings=config.settings.local > dev_data.json
-
+-----------------------------------------------------------------------------
 ## 3. Database Environment Notes
-# - Set DEBUG = False for production mode before dumping data.
-# - If using SQLite, switch to PostgreSQL in config/settings/local.py before migrating/dumping.
-#   (Dumping from SQLite to PostgreSQL is not recommended.)
-
+- Set DEBUG = False for production before dumping data.
+- If using SQLite, switch to PostgreSQL in config/settings/local.py before migrating/dumping.
+    (Dumping from SQLite to PostgreSQL is not recommended.)
+-----------------------------------------------------------------------------
 ## 4. PostgreSQL Setup (Ubuntu/Debian)
 sudo apt install postgresql postgresql-contrib
 sudo service postgresql start
---------------------------------------------------------------
-# Create database and user
+----------------------------------------------------------------------------------    
+### Create database and user
 sudo -u postgres psql
+# or
+psql -U postgres -W
+
 CREATE DATABASE fortitech_local;
 CREATE USER cheche WITH PASSWORD 'yourpassword';
 GRANT ALL PRIVILEGES ON DATABASE fortitech_local TO cheche;
------------------------------------------------------------
 
-If you want this user to:
-
-Create databases:
-
+### Allow user to create databases
 ALTER USER cheche CREATEDB;
-------------------------------------------------------------
-Be a superuser (full access, not usually recommended for apps):
 
+### Make user a superuser (not recommended for apps)
 ALTER USER cheche WITH SUPERUSER;
-----------------------------------------------------------------
-Access a specific database like blog:
 
+### Grant access to a specific database (e.g., blog)
 GRANT ALL PRIVILEGES ON DATABASE blog TO cheche;
-----------------------------------------------------------------
-If you want the user cheche to own a database (e.g., for Django):
 
+### Set user as owner of a database
 CREATE DATABASE blog OWNER cheche;
+
+##Test with database name to see if it will authenticate password in Django
+psql -U postgres -W -d fortitech_local
+
+## or if using the created user 
+psql -U cheche -W -d fortitech_local
+
+### Drop user
+DROP ROLE cheche;
+# Note: If cheche owns any objects, reassign or drop them first:
+REASSIGN OWNED BY cheche TO postgres;
+DROP OWNED BY cheche;
+DROP ROLE cheche;
 \q
 
 ## 5. Migrate Database
@@ -48,7 +57,7 @@ python manage.py migrate --settings=config.settings.production
 ## 6. Dump Data with Indentation
 python manage.py dumpdata --indent 2 --settings=config.settings.local > data.json
 
-# Dump specific app data
+### Dump specific app data
 python manage.py dumpdata blog --indent 2 --settings=config.settings.local > blog_data.json
 
 ## 7. Load Data from JSON

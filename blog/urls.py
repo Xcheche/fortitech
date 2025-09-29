@@ -1,4 +1,6 @@
 from django.urls import path
+
+from blog.feeds import LatestPostsFeed
 from . import views
 
 
@@ -18,4 +20,11 @@ urlpatterns = [
     ),
     #================================= Delete Post========================================
     path("delete_post/<uuid:pk>/", views.DeleteView.as_view(), name="delete_post")
+
+
+    #================================= Share Post========================================
+    ,path("share/<uuid:post_id>/", views.share_post, name="share_post"),
+
+    #============================ Feed=============================================
+    path("feed/", LatestPostsFeed(), name="post_feed"),
 ]

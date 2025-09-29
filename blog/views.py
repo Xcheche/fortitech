@@ -10,10 +10,11 @@ from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.db.models import F
 from django.contrib import messages
-from .forms import PostForm  
+from .forms import PostForm, SharePostForm  
 from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
 from django.views.generic import (UpdateView, DeleteView)
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -164,6 +165,44 @@ class DeleteView(DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("home")  # Redirect to home page after deletion
+
+
+#============Share Post=========================
+# Share post
+def share_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    sent = False
+    if request.method == "POST":
+        form = SharePostForm(request.POST)
+        if form.is_valid():
+            # Process the form data
+            cd = form.cleaned_data
+            # Get absolute or canonical URL of the post
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            # Send the email
+            # Note: Ensure you have configured your email settings in settings.py
+            subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
+            message = (
+                f"Read {post.title} at {post_url}\n\n"
+                f"{cd['name']}'s comments: {cd['comments']}"
+            )
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=None,
+                recipient_list=[cd["to"]],
+            )
+            sent = True
+            messages.success(request, "Post shared successfully!")
+            return redirect(post.get_absolute_url())
+    else:
+        form = SharePostForm()
+    context = {
+        "form": form,
+        "post": post,
+        "sent": sent,
+    }
+    return render(request, "blog/share.html", context=context)
 
 #TODO: Feature to view all post by a specific user   
 

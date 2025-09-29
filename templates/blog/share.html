@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Share post{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container text-center my-5">
+    {% if sent %}
+    <h1>E-mail successfully sent</h1>
+    <p>
+        "{{ post.name }}" was successfully sent to {{ form.cleaned_data.to }}
+    </p>
+    {% else %}
+    <h1>Share "{{ post.name }}" by e-mail</h1>
+</div>
+<section class="contact_area">
+    <div class="container">
+        <form class="row justify-content-center" action="" method="post">
+            {% csrf_token %}
+            <div class="col-md-8">
+                {{ form|crispy }}
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="submit_btn btn" id="js-contact-btn" type="submit" style="background-color: #ffaa3a;">
+                        Share Post <i class="fa fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} recommends: {{ post.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .comments {
+            margin-top: 20px;
+            padding: 10px;
+            border-left: 3px solid #007bff;
+            background: #f1f9ff;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>{{ name }} recommends you read:</h2>
+
+        <p>
+            <strong>{{ post.title }}</strong><br>
+            <a href="{{ post_url }}">{{ post_url }}</a>
+        </p>
+
+        {% if comments %}
+        <div class="comments">
+            <strong>{{ name }}'s comments:</strong>
+            <p>{{ comments }}</p>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            You received this email because {{ name }} ({{ email }}) shared a blog post with you.
+        </div>
+    </div>
+</body>
+
+</html>

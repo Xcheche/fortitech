@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -10,11 +11,14 @@ from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.db.models import F
 from django.contrib import messages
+
+from common.tasks import send_email
 from .forms import PostForm, SharePostForm  
 from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
 from django.views.generic import (UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
+from django.conf import settings
 
 
 # Create your views here.
@@ -182,15 +186,32 @@ def share_post(request, post_id):
             # Send the email
             # Note: Ensure you have configured your email settings in settings.py
             subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
-            message = (
-                f"Read {post.title} at {post_url}\n\n"
-                f"{cd['name']}'s comments: {cd['comments']}"
-            )
-            send_mail(
+            # message = (
+            #     f"Read {post.title} at {post_url}\n\n"
+            #     f"{cd['name']}'s comments: {cd['comments']}"
+            # )
+            # send_mail(
+            #     subject=subject,
+            #     message=message,
+            #     from_email=settings.DEFAULT_FROM_EMAIL,
+            #     recipient_list=[cd["to"]],
+            # )
+            # sent = True
+            #--switched to use common task send_email function with html template
+            # Prepare email context
+            context = {
+                "post": post,
+                "post_url": post_url,
+                "name": cd["name"],
+                "email": cd["email"],
+                "comments": cd["comments"],
+            }
+
+            send_email(
                 subject=subject,
-                message=message,
-                from_email=None,
-                recipient_list=[cd["to"]],
+                email_to=[cd["to"]],
+                html_template="emails/share_post.html",
+                context=context,
             )
             sent = True
             messages.success(request, "Post shared successfully!")

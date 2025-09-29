@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
+
 
 from accounts.forms import DashboardUpdateForm, UserUpdateForm
 from .models import *
@@ -16,7 +18,7 @@ from .decorators import redirect_autheticated_user
 
 # Password change
 from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
@@ -199,6 +201,8 @@ def logout(request: HttpRequest):
 
 
 # ====password_reset
+# def send_password_reset_link(request: HttpRequest):
+
 def send_password_reset_link(request: HttpRequest):
     if request.method == "POST":
         email: str = request.POST.get("email", "")
@@ -213,7 +217,58 @@ def send_password_reset_link(request: HttpRequest):
                     "created_at": datetime.now(timezone.utc),
                 },
             )
+
+            # Build absolute reset URL
+            current_site = get_current_site(request)
+            reset_url = request.build_absolute_uri(
+                reverse("verify_password_reset_link") + f"?email={email.lower()}&token={token.token}"
+            )
+
             # Sending email
+            email_data = {"reset_url": reset_url}
+            send_email(
+                "Your Password Reset Link",
+                [email],
+                "emails/password_reset_template.html",
+                email_data,
+            )
+            messages.success(request, "Reset link sent to your email")
+            return redirect("reset_password_via_email")
+
+        else:
+            messages.error(request, "Email not found")
+            return redirect("reset_password_via_email")
+    if request.method == "POST":
+        email: str = request.POST.get("email", "")
+        user = get_user_model().objects.filter(email=email.lower()).first()
+
+        if user:
+            token, _ = Token.objects.update_or_create(
+                user=user,
+                token_type=Token.TokenType.PASSWORD_RESET,
+                defaults={
+                    "token": get_random_string(20),
+                    "created_at": datetime.now(timezone.utc),
+                },
+            )
+
+
+
+
+            # ✅ Build absolute reset link
+            reset_path = reverse("verify_password_reset_link")
+            reset_url = request.build_absolute_uri(
+                f"{reset_path}?email={email.lower()}&token={token.token}"
+            )
+
+            # ✅ Send full reset_url to template
+            email_data = {
+                "reset_url": reset_url,
+                "email": email.lower(),
+                "token": token.token,
+            }
+
+            #========Sending email=====================
             email_data = {"email": email.lower(), "token": token.token}
             send_email(
                 "Your Password Reset Link",

@@ -12,6 +12,7 @@ DATABASES = {
         "PASSWORD": config("DATABASE_PASSWORD"),
         "HOST": config("DATABASE_HOST"),
         "PORT": config("DATABASE_PORT"),
+        "CONN_MAX_AGE": 0,  # important for serverless: close connection per request
         "OPTIONS": {
             "sslmode": config("DATABASE_SSLMODE", default="require"),
         },

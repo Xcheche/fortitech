@@ -93,3 +93,5 @@ python manage.py sqlmigrate your_app_name migration_number --settings=config.set
 
 ## 15. Create a New Django App
 python manage.py startapp your_app_name --settings=config.settings.local
+    #path("feed/", LatestPostsFeed(), name="post_feed"),
+     <!-- <a class="nav-link" href="{% url 'post_feed' %}" title="RSS Feed" target="_blank" rel="noopener noreferrer    "> -->

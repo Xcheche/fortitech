@@ -1,27 +1,27 @@
-import markdown
-from django.contrib.syndication.views import Feed
-from django.template.defaultfilters import truncatewords_html
-from django.urls import reverse_lazy
-from .models import Post
+# import markdown
+# from django.contrib.syndication.views import Feed
+# from django.template.defaultfilters import truncatewords_html
+# from django.urls import reverse_lazy
+# from .models import Post
 
 
-class LatestPostsFeed(Feed):
-    title = "My blog"
+# class LatestPostsFeed(Feed):
+#     title = "My blog"
     
-    description = "New posts of my blog."
+#     description = "New posts of my blog."
 
 
-    def link(self):
-        return reverse_lazy("home")
+#     def link(self):
+#         return reverse_lazy("home")
 
-    def items(self):
-        return Post.published.all().order_by("-publish")[:5]
+#     def items(self):
+#         return Post.published.all().order_by("-publish")[:5]
 
-    def item_title(self, item):
-        return item.title
+#     def item_title(self, item):
+#         return item.title
 
-    def item_description(self, item):
-        return truncatewords_html(markdown.markdown(item.body), 30)
+#     def item_description(self, item):
+#         return truncatewords_html(markdown.markdown(item.body), 30)
 
-    def item_pubdate(self, item):
-        return item.publish
+#     def item_pubdate(self, item):
+#         return item.publish

@@ -40,9 +40,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="post-list" class="col-12">
+
+                    <!--=====================Wrapping the django blog loop with id search to match javascript==================== -->
+                    <div id="results" class="col-12">
                         {% for post in posts %}
-                        <div class="media feature_post"> 
+                        <div class="media feature_post" > 
                            <div class="feture_img"> 
                             <a href="{{ post.get_absolute_url }}">
                                 {% if post.post_image and post.post_image.url %}
@@ -67,6 +69,7 @@
                         </div>
                         {% endfor %}
                     </div>
+                    <!--=========================== End of wrapping the django blog loop with id search to match javascript====================== -->
                     <!-- <div class="col-12">
                         <div class="media feature_post"> 
                            <div class="feture_img"> 
@@ -106,13 +109,31 @@
 
             <!--====Search====-->
             <div class="col-lg-4 right_sidebar"> 
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <div class="input-group-append">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                <!-- id= search-form  for javascript and id=search-input for javascript -->
+                <form action="{% url 'post_search' %}" method="get" class="input-group mb-3"   id="search-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="Search" id="search-input">
+                        <div class="input-group-append">
+                            <button class="input-group-text" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <!--==End search==-->
+
+                <!-- Loading overlay -->
+                <div id="loading-overlay" style="
+                                  display:none;
+                                  position:fixed;
+                                  top:0;left:0;right:0;bottom:0;
+                                  background:rgba(0,0,0,0.3);
+                                  z-index:9999;
+                                  justify-content:center;
+                                  align-items:center;
+                                ">
+                    <div class="spinner-border text-light" role="status"></div>
+                </div>
 
                 <!--==Categories==-->
                 <div class="categories">
@@ -143,7 +164,7 @@
     </div>
 </section>
 
-
+<!--=========================== AJAX Load More Posts============================= -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const postList = document.getElementById('post-list');
@@ -183,7 +204,66 @@
         }
     });
     </script>
+<!--=========================== End of AJAX Load More Posts============================= -->
+
+<!--=========================== AJAX Search============================= -->
+<script>
+    document.getElementById("search-input").addEventListener("input", function () {
+        const form = document.getElementById("search-form");
+        const query = this.value;
+
+        fetch(form.action + "?q=" + encodeURIComponent(query))
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const newResults = doc.querySelector("#results").innerHTML;
+                document.getElementById("results").innerHTML = newResults;
+            });
+    });
+</script>
+<!--=========================== End of AJAX Search============================= -->
+
+
+
+<!--=========================== Loading overlay============================= -->
+
+<style>
+    /* Loading overlay */
+    #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+</style>
+
+<div id="loading-overlay">
+    <div>Loading...</div>
+</div>
+
+<script>
+    // Dim and show loading screen when form is submitted
+    document.addEventListener("DOMContentLoaded", function () {
+        const forms = document.querySelectorAll("form");
+        const overlay = document.getElementById("loading-overlay");
+        forms.forEach(form => {
+            form.addEventListener("submit", function () {
+                overlay.style.display = "flex";
+            });
+        });
+    });
+</script>
     
+<!--=========================== End of Loading overlay============================= -->
 
 
 

@@ -151,3 +151,31 @@ class Dashboard(models.Model):
 
 # About us model
 # TODO: Add  about and rich text field for description
+
+class About(models.Model):
+    title = models.CharField(max_length=500)
+    
+    about_image = CloudinaryField(
+        "about",
+        folder="fortitech_blog_about_images/",
+        null=True,
+        blank=True,
+        transformation={},# No resizing (use original size)
+    )
+    description = RichTextField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "About"
+        verbose_name_plural = "About"
+
+     # Get image URL
+    @property
+    def imageURL(self):
+        try:
+            url = self.about_image.url
+        except Exception:
+            url = ''
+        return url    

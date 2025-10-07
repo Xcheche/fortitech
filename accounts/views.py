@@ -15,6 +15,7 @@ from datetime import datetime
 from common.tasks import send_email
 from datetime import datetime, timezone
 from .decorators import redirect_autheticated_user
+from .models import About
 
 # Password change
 from django.contrib.auth.views import PasswordChangeView
@@ -27,7 +28,10 @@ User = get_user_model()
 # ===== About view
 # This view renders the about page. It can be used to provide information about the application or
 def about(request: HttpRequest):
-    context = {}
+    items = About.objects.all()
+    context = {
+        "items": items
+    }
     return render(request, "accounts/about.html", context=context)
 
 

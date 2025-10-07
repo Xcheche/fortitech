@@ -24,6 +24,8 @@ class DashboardAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(User, UserAdmin)
 admin.site.register(PendingUser)
+admin.site.register(Token)
+admin.site.register(About)
 
 
 # Dashboard

@@ -27,4 +27,6 @@ urlpatterns = [
 
     #============================ Feed=============================================
     #path("feed/", LatestPostsFeed(), name="post_feed"),
+    #=============Search=========================
+    path("search/", views.search, name="post_search"),
 ]

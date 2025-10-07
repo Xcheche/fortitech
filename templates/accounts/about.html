@@ -17,11 +17,12 @@
     
     <!-- About Content Area --> 
     <section class="about_content">
+        {% for i in items %}
         <div class="container">
-            <h2>Mora.org connects people to low-cost financial services to fight poverty and <br> develop individual potential. <br> Interested? We’re hiring! Explore jobs at Mora.org</h2>
-            <img src="{% static 'images/about.jpg' %}" alt="">
-            <p>The mission of the Stellar Development Foundation (SDF) is to promote global financial access, literacy, and inclusion. SDF accomplishes this by expanding worldwide access to low-cost financial services through the development and maintenance of technology and partnerships. SDF’s vision is an open and affordable financial system where people of all income levels can access simple-to-use, secure, and low cost finan-cial services. SDF also aims to empower developers with useful technology to create financial products and services for their communities.</p>
-         
+            <h2>{{ i.title|safe }}</h2>
+            <img src="{{ i.imageURL }}" alt="">
+            <p>{{ i.description|safe }}</p>
+            {% endfor %}
             <div class="topics_row row">
                <div class="col-12"><h2>Topics</h2></div>
                {% for category in categories_with_post_count %}

@@ -19,7 +19,9 @@ from django.views.generic import (UpdateView, DeleteView)
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.conf import settings
-
+from  django.db.models import Q
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 
 # Create your views here.
 #====================================Home============================
@@ -227,5 +229,49 @@ def share_post(request, post_id):
 
 #TODO: Feature to view all post by a specific user   
 
-# Search
-# TODO: Implement search functionality using Django's built-in search or a third-party package for blog app , make single page with ajax
+
+
+#======================== Search View========================================
+#Use this if not using Q objects and want to return a result template and lopp through results 
+#or return to index.html with results context and loop through results
+# def search(request):
+#     query = request.GET.get('q')
+#     results = []
+
+#     if query:
+#         results = (
+#             Post.published.filter(title__icontains=query) |
+#             Post.published.filter(body__icontains=query) |
+#             Post.published.filter(category__name__icontains=query)
+#         ).distinct()
+
+#     context = {
+#         'results': results,
+#         'query': query,
+#     }
+#     return render(request, 'blog/index.html', context)
+
+
+#======================== Search View========================================
+def search(request):
+    import time  # noqa: F811
+
+    time.sleep(1.5)
+    query = request.GET.get('q')
+    posts = Post.published.all()  # start with all posts
+
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(body__icontains=query) |
+            Q(category__name__icontains=query)
+        ).distinct()
+
+    context = {
+        'posts': posts,
+        'query': query,
+    }
+    if not posts.exists():
+        context["message"] = "No posts found."
+    return render(request, 'blog/index.html', context)
+

@@ -15,7 +15,7 @@ urlpatterns = [
     # Auth
     path("register/", views.register, name="register"),
     path("verify_account/", views.verify_account, name="verify_account"),
-    path("login/", views.login, name="login"),
+    path("login/", views.user_login, name="login"),
     path("logout/", views.logout, name="logout"),
     path(
         "forgot-password/",

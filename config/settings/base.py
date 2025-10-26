@@ -45,6 +45,8 @@ THIRD_PARTY_APPS = [
     # External apps/packages
     "whitenoise",
     "ckeditor",
+    "django_extensions",
+    "social_django",
     # "django_password_eye",  for password visibility toggle
 ]
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -63,6 +65,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -204,3 +207,63 @@ LOGGING = {
         "handlers": ["console"]
     }
 }
+
+
+
+
+
+#------------------Social_django----------------
+AUTHENTICATION_BACKENDS = [
+'django.contrib.auth.backends.ModelBackend',
+'accounts.authentication.EmailAuthBackend',
+'social_core.backends.google.GoogleOAuth2',
+'social_core.backends.github.GithubOAuth2',
+] 
+
+
+#-------------------------------Social Auth Pipeline------------------ 
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',       # must come first
+    'accounts.pipeline.debug_user',                     # <-- add here
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
+#-------- Google OAuth2------------------------------
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['email']
+SOCIAL_AUTH_GOOGLE_OAUTH2_FORCE_EMAIL_VALIDATION = True
+
+# ❗ CRITICAL — ADD THIS
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    "prompt": "select_account",
+    "access_type": "offline"
+}
+
+# settings.py
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
+
+
+#Github OAuth2
+GITHUB_OAUTH2_KEY=config('GITHUB_OAUTH2_KEY')
+GITHUB_OAUTH2_SECRET=config('GITHUB_OAUTH2_SECRET')
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+
+
+LOGIN_REDIRECT_URL = '/'  # or wherever you want user to land after login
+
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"

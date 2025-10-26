@@ -22,6 +22,8 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="*")
 
 #Database url
 
+
+
 DATABASES = {
     "default": dj_database_url.parse(
         config("DATABASE_URL"),
@@ -29,5 +31,4 @@ DATABASES = {
         ssl_require=True    # Neon requires SSL
     )
 }
-
 print(DATABASES)

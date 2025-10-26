@@ -3,7 +3,8 @@ from django.contrib.auth.base_user import BaseUserManager
 
 # Creating user
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password, **extra_fields):
+    #def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         """
         Create and return a user with an email and password.
         """

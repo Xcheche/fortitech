@@ -31,10 +31,15 @@
             <div class="header_top_inner d-sm-flex justify-content-sm-between">
                 <ul class="left_info"> 
                     <li><a href="/">FortiTech</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
                     <li><a href="{% url 'about' %}">About Us</a></li>
                     <!-- <li><a href="error.html">Error 404</a></li> -->
+                     {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+
                     <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
                 </ul> 
                 <ul class="header_social">
                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -42,7 +47,7 @@
                     <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                     <li><a href="#"><i class="fa fa-vine"></i></a></li> 
                     <li><a href="#" class="shop_btn"><i class="flaticon-shopping-bag"></i> <span>0</span></a></li>
-                    <li><a href="#" class="quote_btn">Get Free Quote <i class="fa fa-arrow-right"></i></a></li>
+                  
                 </ul> 
             </div>
         </div> 

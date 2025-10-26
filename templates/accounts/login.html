@@ -44,10 +44,12 @@
                 <h4 class="col-12">or login in with</h4> 
                 <div class="form-group col-sm-6">
                     <!--TODO: Implement Google login-->
-                    <a href="#" class="google_btn"><img src="{% static 'images/google.png' %}" alt="">GOOGLE</a>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/" class="google_btn"><img src="{% static 'images/google.png' %}" alt="">GOOGLE</a>
+                 
+
                 </div>
                 <div class="form-group col-sm-6">  
-                    <a href="" class="google_btn"><i class="fa fa-facebook"></i>Sign Up</a> 
+                    <a href="{% url 'social:begin' 'github' %}?next=/" class="google_btn"><i class="fa fa-github"></i>GITHUB</a> 
                 </div>  
                 <!-- <div class="col-12">  
                     <div class="custom-control custom-checkbox">

@@ -19,14 +19,16 @@ urlpatterns = [
         name="post_detail",
     ),
     #================================= Delete Post========================================
-    path("delete_post/<uuid:pk>/", views.DeleteView.as_view(), name="delete_post")
+    path("delete_post/<uuid:pk>/", views.DeleteView.as_view(), name="delete_post"),
+    path('user_posts/<str:email>/', views.UserPostListView.as_view(), name='user-posts'),
 
 
     #================================= Share Post========================================
-    ,path("share/<uuid:post_id>/", views.share_post, name="share_post"),
+    path("share/<uuid:post_id>/", views.share_post, name="share_post"),
 
     #============================ Feed=============================================
     #path("feed/", LatestPostsFeed(), name="post_feed"),
     #=============Search=========================
     path("search/", views.search, name="post_search"),
 ]
+

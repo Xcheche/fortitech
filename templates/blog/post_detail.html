@@ -20,14 +20,18 @@
                             <a href="#">{{ post.author.email|nice_name }}</a>
                             <a href="#" class="investing">{{ post.category }}</a>
                             <div class="btn-group m-3">
+                                {% if user.is_staff or user == post.author %}
                                 <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-cog"></i> Manage
                                 </button>
+                               
                                 <div class="dropdown-menu  m-3 p-5">
                                     <a class="dropdown-item mb-3" href="{% url 'edit_post' post.pk %}"><i class="fa fa-edit"></i> Edit</a>
                                     <a class="dropdown-item" href="{% url 'delete_post' post.pk %}"><i class="fa fa-trash"></i> Delete</a>
                                 </div>
+                               
                             </div>
+                            {% endif %}
                         </h6>
                         <a href="news-details.html" class="news_heding">{{ post.title|safe }}</a>
 

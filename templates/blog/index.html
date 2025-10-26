@@ -62,7 +62,7 @@
                            </div> 
                             <div class="media-body feture_content">
                                 <a href="{{ post.get_absolute_url }}" class="f_heding">{{ post.title }}</a>
-                                <h6>{{ post.publish }} <span>|</span><a href="#">
+                                <h6>{{ post.publish }} <span>|</span><a href="{% url 'user-posts' post.author.email %}">
                                     {{ post.author.email|nice_name }}</a></h6>
                                 <p>{{ post.body|safe|truncatechars:50 }}</p>
                             </div>

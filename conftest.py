@@ -5,13 +5,16 @@ It includes a client fixture for making requests, a user instance fixture for cr
 and an authentication user password fixture for testing purposes.
 """
 
+from turtle import title
 from django.test.client import Client
 import pytest
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from blog.models import Category, Post
+
+
 
 
 @pytest.fixture
@@ -24,6 +27,8 @@ def client():
 
 @pytest.fixture
 def user_instance(db):
+
+    User = get_user_model()
     return User.objects.create_user(
         email="testuser@example.com", password="testpassword123"
     )
@@ -44,3 +49,20 @@ def dashboard_update_data(user_instance):
         "country": "NG",  # ISO code for Nigeria
         "city": "Lagos",
     }
+
+
+@pytest.fixture
+def post_create(user_instance):
+    category = Category.objects.create(name="Cybersecurity")
+    return {
+        "category": category,
+        "title": "Django Testing",
+        "body": "Content about Django",
+        "author": user_instance
+    }
+
+@pytest.fixture
+def edit_post(post_create):
+    post = Post.objects.create(**post_create)
+    return post
+    

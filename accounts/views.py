@@ -4,25 +4,39 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
+
 
 from accounts.forms import DashboardUpdateForm, UserUpdateForm
 from .models import *
 
 from django.utils.crypto import get_random_string  # Create your views here.
 from django.contrib.auth.hashers import make_password
+
+from django.contrib.auth import login as auth_login
+
 from django.contrib import auth
 from datetime import datetime
 from common.tasks import send_email
 from datetime import datetime, timezone
-from .decorators import redirect_autheticated_user
+from .decorators import redirect_authenticated_user
 from .models import About
+from .models import PendingUser, Dashboard, Token
+
+from django.db import transaction
 
 # Password change
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
+
 User = get_user_model()
+
+
+
 
 
 # ===== About view
@@ -36,9 +50,12 @@ def about(request: HttpRequest):
 
 
 # ===== Dashboard view# This view handles the user's dashboard. It allows the user to update their profile and dashboard information.
-# @login_required
+@login_required
 def dashboard(request):
-    dashboard_obj = request.user.dashboard  # from related_name
+    #Ensure the dashboard exists in an atomic transaction
+    with transaction.atomic():
+        dashboard_obj, created = Dashboard.objects.get_or_create(user=request.user)
+
 
     if request.method == "POST":
         user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
@@ -73,7 +90,7 @@ def dashboard(request):
 # ====Delete Dashboard
 # This view handles the deletion of the user's dashboard. It deletes the dashboard and redirects to the
 
-
+@login_required
 def delete_dashboard(request):
     if request.method == "POST":
         # You can either delete just the dashboard, or delete the whole user
@@ -88,7 +105,8 @@ def delete_dashboard(request):
 
 # =====Change Password
 # This view handles the change of the user's password. It checks if the old password is correct
-class DashboardPasswordChangeView(PasswordChangeView):
+
+class DashboardPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = "accounts/change_password.html"
     success_url = reverse_lazy("dashboard")
 
@@ -100,15 +118,9 @@ class DashboardPasswordChangeView(PasswordChangeView):
 # ====== Register view with email verification
 # This view handles the registration of a new user. It checks if the email already exists in the database.
 # If the email is new, it creates a new PendingUser object with a verification code and sends a verification email.
-@redirect_autheticated_user
+@redirect_authenticated_user
 def register(request: HttpRequest):
-    context = {
-        # "page_title": "Register",
-        # "breadcrumbs": [
-        #     {"name": "Home", "url": "/"},
-        #     {"name": "Register", "url": "Register"},
-        # ],
-    }
+    context = {}
 
     if request.method == "POST":
         email: str = request.POST["email"]
@@ -140,6 +152,7 @@ def register(request: HttpRequest):
 
             # Add 'email' to the existing context for the POST response
             context["email"] = cleaned_email
+      
 
             return render(request, "accounts/verify_account.html", context=context)
 
@@ -163,9 +176,15 @@ def verify_account(request: HttpRequest):
                 email=pending_user.email, password=pending_user.password
             )
             pending_user.delete()
-            auth.login(request, user)
+            # Create dashboard BEFORE redirect
+            Dashboard.objects.get_or_create(user=user)
+            
+            # auth.login(request, user)
+            #Using  model backend because we have two backends
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+
             messages.success(request, "Account verified. You are now logged in")
-            return redirect("dashboard")
+            return redirect("/")
         else:
             messages.error(request, "Invalid or expired verification code")
             return render(
@@ -178,24 +197,24 @@ def verify_account(request: HttpRequest):
 # If the credentials are valid, it logs the user in and redirects them to the home page.
 
 
-@redirect_autheticated_user
-def login(request: HttpRequest):
 
+@redirect_authenticated_user
+def user_login(request: HttpRequest):
     if request.method == "POST":
-        email: str = request.POST["email"]
-        password: str = request.POST["password"]
+        email = request.POST["email"]
+        password = request.POST["password"]
         user = auth.authenticate(request, email=email, password=password)
+
         if user is not None:
-            auth.login(request, user)
+            # Using model backed because we have two backends
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
             messages.success(request, "You are now logged in")
             return redirect("dashboard")
         else:
             messages.error(request, "Invalid email or password")
             return redirect("login")
 
-    else:
-        return render(request, "accounts/login.html")
-
+    return render(request, "accounts/login.html")
 
 # ======= Logout view
 def logout(request: HttpRequest):
@@ -343,3 +362,9 @@ def set_new_password_using_reset_link(request: HttpRequest):
         token.delete()
         messages.success(request, "Password changed.")
         return redirect("login")
+
+
+
+#TODO:Notification per  user Dashboard django channels or celery tasks
+#TODO:News letter subscription
+#TODO:Blog subscription plans with stripe integration or paystack

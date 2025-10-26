@@ -78,6 +78,16 @@ class Post(BaseModel):
     def __str__(self):
         return self.title
     
+    # Get image URL
+    @property
+    def imageURL(self):
+        try:
+            url = self.post_image.url
+        except Exception:
+            url = ''
+        return url
+    
+    
 
 
 

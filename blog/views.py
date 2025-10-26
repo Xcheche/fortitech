@@ -22,6 +22,8 @@ from django.conf import settings
 from  django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 #====================================Home============================
@@ -226,8 +228,19 @@ def share_post(request, post_id):
         "sent": sent,
     }
     return render(request, "blog/share.html", context=context)
+ 
+#=======================================All posts by a specific user=========================================
+class UserPostListView(ListView):
+    model = Post
+    template_name = 'blog/user_posts.html'  
+    context_object_name = 'posts'
+    paginate_by = 4
 
-#TODO: Feature to view all post by a specific user   
+    def get_queryset(self):
+        user = get_object_or_404(User, email=self.kwargs.get('email'))
+        return Post.objects.filter(author=user).order_by('-created_at')
+
+
 
 
 
@@ -274,4 +287,5 @@ def search(request):
     if not posts.exists():
         context["message"] = "No posts found."
     return render(request, 'blog/index.html', context)
+
 

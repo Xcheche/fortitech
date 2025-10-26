@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+{% load blog_extras %}
+<div class="container">
+    <div class="row justify-content-center"></div>
+        <div class="col-12 col-md-10 col-lg-8">
+            <h1 class="mb-3  mt-3 text-center">Posts by {{ view.kwargs.email|nice_name|capfirst }} ({{ page_obj.paginator.count }})</h1>
+
+            {% for post in posts %}
+            <article class="content-section d-flex flex-column flex-md-row align-items-start mb-4">
+                <img
+
+                    src="{{ post.imageURL }}"
+                    alt="{{ post.author.email|nice_name }}"
+                    class="rounded-circle img-fluid mr-md-3 mb-3 mb-md-0"
+                    style="width:64px; height:64px; object-fit:cover;"
+                >
+                <div class="flex-fill">
+                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap">
+                        <a class="mr-2 text-break" href="{% url 'user-posts' post.author.email %}">{{ post.author.email|nice_name }}</a>
+                        <small class="text-muted">{{ post.publish|date:"F d, Y" }}</small>
+                    </div>
+
+                    <h2 class="h5 mb-1">
+                        <a class="article-title" href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </h2>
+
+                    <!-- show excerpt on md+ screens to reduce clutter on small devices -->
+                    <p class="article-content text-muted d-none d-md-block mb-0">
+                        {{ post.body|truncatechars:200 }}
+                    </p>
+                </div>
+            </article> 
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    <!--Start of pagination-->
+<div class="pagination text-center my-4 d-flex justify-content-center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<!--End of pagination-->
+
+    
+</div>
+
+
+
+
+    {% endblock content %}

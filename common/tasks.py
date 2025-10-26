@@ -7,6 +7,8 @@ from django.utils.html import strip_tags
 
 from django.conf import settings
 
+from common.utils.thread_email import EmailThread
+
 
 def send_email(subject: str, email_to: list[str], html_template, context):
     html_template = get_template(html_template)
@@ -24,11 +26,13 @@ def send_email(subject: str, email_to: list[str], html_template, context):
         to=email_to,
     )
     msg.attach_alternative(html_content, "text/html")
-    msg.send(fail_silently=False)
+    # msg.send(fail_silently=False)
+    EmailThread(msg).start()
 #-----------------------------------------------------------------------------------------------------------------
 
 # =====Welcome email for signal
 # =========================================
+#Not in use
 def send_welcome_emails(user):
     """
     Sends a welcome email to a new user and a notification email to the site owner.
@@ -99,7 +103,8 @@ def send_contact_email(contact):
             to=[owner_email],
         )
         owner_email_message.attach_alternative(owner_html, "text/html")
-        owner_email_message.send()
+        #owner_email_message.send()
+        EmailThread(owner_email_message).start()
 
         # === 2) Send confirmation email to CLIENT ===
         client_context = {"contact": contact}
@@ -113,7 +118,8 @@ def send_contact_email(contact):
             to=[contact.email],  # assumes your model has "email" field
         )
         client_email_message.attach_alternative(client_html, "text/html")
-        client_email_message.send()
+        # client_email_message.send()
+        EmailThread(client_email_message).start()
 
         print("Both owner and client emails sent successfully.")
 

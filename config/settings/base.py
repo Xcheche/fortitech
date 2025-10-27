@@ -33,6 +33,7 @@ DJANGO_APPS = [
     "crispy_bootstrap5",
     "cloudinary",
     "cloudinary_storage",
+    "gunicorn",
 ]
 PROJECT_APPS = [
     # Projects

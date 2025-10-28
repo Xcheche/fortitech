@@ -54,6 +54,7 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="williams@fortitech9ja
 
 
 
+
 # Debugging output to verify email settings are loaded correctly
 print(
     "Email configuration loaded: ",

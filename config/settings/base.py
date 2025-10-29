@@ -89,6 +89,13 @@ TEMPLATES = [
     },
 ]
 
+
+# Add social_django context processors
+TEMPLATES[0]["OPTIONS"]["context_processors"] += [
+    "social_django.context_processors.backends",
+    "social_django.context_processors.login_redirect",
+]
+
 WSGI_APPLICATION = "config.wsgi.application"
 
 
@@ -257,14 +264,30 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.profile'
 ]
 
+# If you deploy behind HTTPS (Render/Cloud Run/etc.), set these for prod:
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SOCIAL_AUTH_LOGIN_ERROR_URL = "/login-error/"
+APPEND_SLASH = True
+
+
+CSRF_TRUSTED_ORIGINS = ["https://www.fortitech9ja.com", "https://www.fortitech9ja.com"]
 
 #Github OAuth2
-GITHUB_OAUTH2_KEY=config('GITHUB_OAUTH2_KEY')
-GITHUB_OAUTH2_SECRET=config('GITHUB_OAUTH2_SECRET')
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_GITHUB_KEY=config('GITHUB_OAUTH2_KEY')
+SOCIAL_AUTH_GITHUB_SECRET=config('GITHUB_OAUTH2_SECRET')
+
 
 
 LOGIN_REDIRECT_URL = '/'  # or wherever you want user to land after login
 
 LOGIN_URL = "login"
 LOGOUT_URL = "logout"
+
+
+# Safety: fail loud if still missing (remove once set)
+if not SOCIAL_AUTH_GITHUB_KEY or not SOCIAL_AUTH_GITHUB_SECRET:
+    raise RuntimeError(
+        "GitHub OAuth env vars missing. Set SOCIAL_AUTH_GITHUB_KEY/SECRET or GITHUB_OAUTH2_KEY/SECRET"
+    )

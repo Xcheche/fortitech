@@ -54,3 +54,13 @@ requests-oauthlib==2.0.0
 social-auth-app-django==5.6.0
 gunicorn
 
+
+
+#---------------------Mailpit  Testing------------------------------
+# EMAIL_HOST=localhost
+# EMAIL_PORT=1025
+# EMAIL_HOST_USER=
+# EMAIL_HOST_PASSWORD=
+# EMAIL_USE_TLS=False
+# DEFAULT_FROM_EMAIL=webmaster@localhost
+

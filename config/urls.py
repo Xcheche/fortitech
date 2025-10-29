@@ -24,12 +24,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("", include("blog.urls")),
-    path("shop", include("shop.urls")),
-    path("contacts", include("contacts.urls")),
-
+    path("shop/", include("shop.urls")),
+    path("contacts/", include("contacts.urls")),
     
     # Social Auth
-    path('social-auth/', include('social_django.urls', namespace='social')),
+    path("social-auth/", include("social_django.urls", namespace="social")),
 ]
 
 if settings.DEBUG:

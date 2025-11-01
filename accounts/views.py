@@ -95,7 +95,7 @@ def delete_dashboard(request):
     if request.method == "POST":
         # You can either delete just the dashboard, or delete the whole user
         request.user.delete()  # deletes user and dashboard because of cascade
-        messages.success(request, "Your account has been deleted.")
+        messages.info(request, "Your account has been deleted.")
         return redirect("home")  # or a goodbye page
 
     return render(

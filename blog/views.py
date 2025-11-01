@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.db.models import F
 from django.contrib import messages
+from django.http import JsonResponse
 
 from common.tasks import send_email
 from .forms import PostForm, SharePostForm  
@@ -40,7 +41,7 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["popular_posts"] = Post.published.order_by("-views_count")[:5]
+        context["popular_posts"] = Post.published.order_by("-views")[:5]
         return context
 
 
@@ -76,14 +77,18 @@ def post_detail(request, year, month, day, post):
     )
 
     # increase views
-    Post.objects.filter(pk=post.pk).update(views_count=F("views_count") + 1)
-    post.refresh_from_db()
+    session_key = f"viewed_post_{post.pk}"
+    if not request.session.get(session_key, False):
+        Post.objects.filter(pk=post.pk).update(views=F("views") + 1)
+        request.session[session_key] = True
+        post.refresh_from_db(fields=["views"])
 
     # get reply target if exists
     reply_to = None
     reply_id = request.GET.get("reply_to")
     if reply_id:
         reply_to = Comment.objects.filter(id=reply_id, post=post).first()
+        #TODO: Send email notification to comment author about reply
 
     # handle form
     if request.method == "POST":
@@ -97,6 +102,8 @@ def post_detail(request, year, month, day, post):
                 Comment.objects.filter(id=parent_id).first() if parent_id else None
             )
             comment.save()
+            #TODO: Send email notification to post author about new comment
+            messages.success(request, "Your comment has been added successfully.")
             return redirect(post.get_absolute_url())
     else:
         form = CommentForm()
@@ -172,7 +179,8 @@ class DeleteView(DeleteView):
     """View to delete an existing blog post."""
     model = Post
     template_name = "blog/post_confirm_delete.html"
-    success_url = reverse_lazy("home")  # Redirect to home page after deletion
+    success_url = reverse_lazy("home")
+      # Redirect to home page after deletion
 
 
 #============Share Post=========================
@@ -289,3 +297,18 @@ def search(request):
     return render(request, 'blog/index.html', context)
 
 
+
+#================================ Like a post and toggle on/off=========================================
+@login_required
+
+
+@login_required
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    return JsonResponse({"liked": liked, "total_likes": post.total_likes()})

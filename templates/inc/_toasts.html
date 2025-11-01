@@ -1,0 +1,14 @@
+{% load static %}
+<div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+<script>
+    // Queue messages from Django into a global, then render them after DOM ready.
+    window.DJANGO_TOASTS = window.DJANGO_TOASTS || [];
+    /* {% for message in messages %} */
+    window.DJANGO_TOASTS.push({ text: "{{ message|escapejs }}", level: "{{ message.tags|default_if_none:'info' }}" });
+    /* {% endfor %} */
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof window.renderDjangoToasts === "function") {
+            window.renderDjangoToasts(window.DJANGO_TOASTS);
+        }
+    });
+</script>

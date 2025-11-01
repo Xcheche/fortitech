@@ -15,6 +15,7 @@
     
     <!-- Theme style CSS -->     
     <link href="{% static 'css/style.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/toasts.css' %}">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -55,8 +56,11 @@
     <!-- Header Top Area -->   
  <!--====Main header=====-->   
    {% include 'inc/main-header.html' %}
-   <!--====End of Main header=====-->       
+   <!--====End of Main header=====-->  
+
     <!--====Main content-->
+    <!--===Toasts===-->
+    {% include 'inc/_toasts.html' %}
    {%block content %} {% endblock %}
     <!--===End o main content=====-->
     
@@ -75,9 +79,14 @@
     
     <!-- Preloader -->
     <div class="preloader"></div>
+    <!--===Toast===-->
+    <script src="{% static 'js/toasts.js' %}"></script>
     <!--===Alerts.js-->
-    <script src="{% static 'js/alerts.js' %}"></script>
-    
+    <!-- <script src="{% static 'js/alerts.js' %}"></script> -->
+
+    <!--Like ajax-->
+   
+
     <!-- jQuery v3.2.1 -->
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script> 
  
@@ -90,6 +99,7 @@
     
     <!-- Theme js / Custom js -->
     <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/like.js' %}"></script>
 </body>
 
 </html>

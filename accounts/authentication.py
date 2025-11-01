@@ -1,5 +1,8 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from accounts.models import Dashboard
+from common.tasks import send_welcome_emails
 from django.db import transaction
 import logging
 logger = logging.getLogger(__name__)
@@ -33,6 +36,8 @@ def create_dashboard(_backend, user, *_args, **_kwargs):
                     user=user,
                     
                 )
+                #Send welcome email
+                send_welcome_emails(user=user)
                 if created:
                     logger.info("Created dashboard for user %s", user.pk)
         except Exception as e:

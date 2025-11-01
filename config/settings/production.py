@@ -42,6 +42,6 @@ SOCIAL_AUTH_GITHUB_OAUTH2_REDIRECT_URI = (
 )
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-ALLOWED_HOSTS = ["www.fortitech9ja.com"]
+# ALLOWED_HOSTS = ["www.fortitech9ja.com"]
 CSRF_TRUSTED_ORIGINS = ["https://www.fortitech9ja.com"]
 APPEND_SLASH = True

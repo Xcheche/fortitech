@@ -65,7 +65,18 @@ class Post(BaseModel):
     status = models.CharField(
         max_length=2, choices=Status.choices, default=Status.DRAFT
     )
-    views_count = models.PositiveIntegerField(default=0)
+   
+
+
+    #-------------  ManyToMany for likes-------------------------
+    likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)
+    views = models.PositiveIntegerField(default=0)  # new field
+
+
+    def total_likes(self):
+        return self.likes.count()
+
+    
 
     #----------------- Metadata for the post--------------------
     class Meta:
@@ -73,7 +84,13 @@ class Post(BaseModel):
         verbose_name_plural = "Posts"
         indexes = [
             models.Index(fields=["-publish"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["slug"]),
         ]
+        constraints = [
+            models.UniqueConstraint(fields=['title', 'author'], name='unique_post_per_author')
+        ]
+
     #----------------- String representation of the post--------------------
     def __str__(self):
         return self.title

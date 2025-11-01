@@ -17,7 +17,7 @@
 <section class="login_area">
     <div class="container">
         <span>
-            {% include 'inc/alerts.html' %}
+            {% include 'inc/_toasts.html' %}
           </span>
         <div class="login_inner">  
             <form class="row login_from" method="post" action="{% url 'register' %}">  
@@ -41,15 +41,19 @@
                     <a href="{% url 'reset_password_via_email' %}" class="reset_btn">Reset Password</a>
                 </div>
                 <div class="form-group col-sm-6">  
-                    <a href="" class="reset_btn">Login</a> 
+                    <a href="{% url 'login' %}" class="reset_btn">Login</a> 
                 </div> 
                 <h4 class="col-12">or login in with</h4> 
                 <div class="form-group col-sm-6">
-                    <a href="#" class="google_btn"><img src="images/google.png" alt="">GOOGLE</a>
+                    <!--TODO: Implement Google login-->
+                    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/" class="google_btn"><img
+                            src="{% static 'images/google.png' %}" alt="">GOOGLE</a>
+                
+                
                 </div>
-                <div class="form-group col-sm-6">  
-                    <a href="#" class="google_btn"><i class="fa fa-facebook"></i>Sign Up</a> 
-                </div>  
+                <div class="form-group col-sm-6">
+                    <a href="{% url 'social:begin' 'github' %}?next=/" class="google_btn"><i class="fa fa-github"></i>GITHUB</a>
+                </div>
                 <!-- <div class="col-12">  
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="check1">

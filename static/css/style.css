@@ -4365,3 +4365,35 @@ body a:focus, body a:hover, body .btn:focus, body .btn:hover, body button:focus,
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+/*End of message styles*/
+
+/*Splash for likes*/
+#heart-splash {
+  position: relative;
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
+.heart {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0;
+  animation: floatUp 1s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60px) scale(1.6);
+    opacity: 0;
+  }
+}
+/*End of splash for likes*/
+

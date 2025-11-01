@@ -62,9 +62,12 @@
                            </div> 
                             <div class="media-body feture_content">
                                 <a href="{{ post.get_absolute_url }}" class="f_heding">{{ post.title }}</a>
+                                <a href="{{ post.get_absolute_url }}#comments"><i class="fa fa-comment" style="color: #82459a;"></i>  <span style="color: #cd8148;">({{ post.comments.count }})</span></a>
                                 <h6>{{ post.publish }} <span>|</span><a href="{% url 'user-posts' post.author.email %}">
                                     {{ post.author.email|nice_name }}</a></h6>
                                 <p>{{ post.body|safe|truncatechars:50 }}</p>
+                                 <span class="badge badge-secondary ml-2" id="like-count">Likes {{ post.total_likes }} | Views {{ post.views }}</span>
+
                             </div>
                         </div>
                         {% endfor %}

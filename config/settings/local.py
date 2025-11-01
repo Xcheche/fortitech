@@ -27,3 +27,22 @@ DATABASES = {
 #         },
 #     }
 # }
+# Django Debug Toolbar
+INSTALLED_APPS += [ "debug_toolbar"]
+# Additional middleware introduced by debug toolbar
+MIDDLEWARE += [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+]
+
+
+
+# Allow internal IPs for debugging
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "0.0.0.0",
+    "0.0.0.1",
+    "localhost",
+    "testserver",
+]
+
+ALLOWED_HOSTS = INTERNAL_IPS

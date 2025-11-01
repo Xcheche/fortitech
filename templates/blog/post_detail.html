@@ -18,7 +18,7 @@
                         <h6>
                             <span>{{ post.publish }}</span>
                             <a href="#">{{ post.author.email|nice_name }}</a>
-                            <a href="#" class="investing">{{ post.category }}</a>
+                            <a href="#" class="investing" style="background-color: #7b40a1;">{{ post.category }}</a>
                             <div class="btn-group m-3">
                                 {% if user.is_staff or user == post.author %}
                                 <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,13 +45,36 @@
 
                         <div class="share_row row">
                             <div class="col-sm-6 share_area">
-                                <ul>
-                                    <a class="m-3" href="{% url 'share_post' post.pk %}" style="background-color: #ffaa3a;">
-                                        <li>Click to Share:</li>
-                                    </a>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                <ul class="list-inline m-0">
+                                    <li class="list-inline-item m-1">
+                                        <a class="btn btn-sm" href="{% url 'share_post' post.pk %}" style="background-color: #ffaa3a; color: #fff;">
+                                            <i class="fa fa-share"></i> Share
+                                        </a>
+                                    </li>
 
+                                    <li class="list-inline-item m-1">
+                                        <a class="btn btn-sm" href="#"><i class="fa fa-facebook"></i></a>
+                                    </li>
+
+                                    <li class="list-inline-item m-1">
+                                        <a class="btn btn-sm" href="#"><i class="fa fa-instagram"></i></a>
+                                    </li>
+
+                                    <li class="list-inline-item m-1 d-flex align-items-center">
+                                        <button class="btn btn-sm" id="like-btn" data-url="{% url 'like_post' post.id %}">
+                                            {% if user in post.likes.all %}
+                                            ❤️ Unlike
+                                            {% else %}
+                                            🤍 Like
+                                            {% endif %}
+                                        </button>
+                                        
+                                        <span class="badge badge-secondary ml-2" id="like-count">{{ post.total_likes }}</span>
+                                      
+                                        <div id="heart-splash"></div>
+
+                                    </li>
+                                      
                                 </ul>
                             </div>
                             <div class="col-sm-6 back_to">
@@ -59,6 +82,7 @@
                             </div> 
                         </div> 
                     </div> 
+                   
 
                     <!-- Comments -->
                     <div class="comment_area">

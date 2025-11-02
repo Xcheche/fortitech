@@ -18,7 +18,7 @@ from django.contrib.auth import login as auth_login
 
 from django.contrib import auth
 from datetime import datetime
-from common.tasks import send_email
+from common.tasks import send_email, send_welcome_emails
 from datetime import datetime, timezone
 from .decorators import redirect_authenticated_user
 from .models import About
@@ -182,6 +182,8 @@ def verify_account(request: HttpRequest):
             # auth.login(request, user)
             #Using  model backend because we have two backends
             auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+            #Send welcome email
+            send_welcome_emails(user=user)
 
             messages.success(request, "Account verified. You are now logged in")
             return redirect("/")

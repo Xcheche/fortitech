@@ -5,7 +5,7 @@ from cloudinary import CloudinaryImage
 from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.urls import reverse
-from common.models import BaseModel
+from common.models import CoreModel
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 
@@ -19,7 +19,7 @@ class PublishedManager(models.Manager):
 
 
 #==================================== Category==========================================
-class Category(models.Model):
+class Category(CoreModel):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=200, unique=True)
 
@@ -31,7 +31,7 @@ class Category(models.Model):
 
 
 #================================== Post Model extending from base model abstract class========================================
-class Post(BaseModel):
+class Post(CoreModel):
     """Model representing a blog post."""
     objects = models.Manager()  # The default manager.
     published = PublishedManager()  # Our custom manager.
@@ -148,7 +148,7 @@ class Post(BaseModel):
 
 
 #================================== Comment===========================
-class Comment(BaseModel):
+class Comment(CoreModel):
     """Model representing a comment on a blog post."""
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(User, on_delete=models.CASCADE)

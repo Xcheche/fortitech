@@ -1,6 +1,7 @@
 # forms.py
 from django import forms
-from .models import Comment,Post
+from .models import Comment,Post, Category
+
 
 BAD_WORDS = [
     "badword1",
@@ -45,6 +46,9 @@ class CommentForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    # Nesting category model so it can show in ui in form of dropdown
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Select a category")
+
     class Meta:
         model = Post
         fields = '__all__'

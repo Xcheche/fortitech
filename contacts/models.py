@@ -1,10 +1,10 @@
 from django.db import models
-from common.models import BaseModel
+from common.models import  CoreModel
 
 # Create your models here.
 
 
-class Contact(BaseModel):
+class Contact(CoreModel):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -13,7 +13,7 @@ class Contact(BaseModel):
         max_length=100,
         choices=[
             ("inquiry", "Inquiry"),
-            ("register_course", "Register Course"),
+         
             ("other", "Other"),
         ],
         default="inquiry",

@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from .manager import CustomUserManager
-from common.models import BaseModel
+from common.models import CoreModel
 from django_countries.fields import CountryField
 from PIL import Image # noqa
 from ckeditor.fields import RichTextField
@@ -14,7 +14,7 @@ from cloudinary.models import CloudinaryField
 
 
 class User(
-    BaseModel, AbstractBaseUser, PermissionsMixin
+    CoreModel, AbstractBaseUser, PermissionsMixin
 ):  # Inheriting the basemodel abstract class from common folder
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
@@ -31,7 +31,7 @@ class User(
 
 # Email verification
 class PendingUser(
-    BaseModel
+    CoreModel
 ):  # Inheriting the basemodel abstract class from common folder
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
@@ -54,7 +54,7 @@ class PendingUser(
 # For reset
 
 
-class Token(BaseModel):
+class Token(CoreModel):
     class TokenType(models.TextChoices):
         PASSWORD_RESET = ("PASSWORD_RESET", "PASSWORD_RESET")
 
